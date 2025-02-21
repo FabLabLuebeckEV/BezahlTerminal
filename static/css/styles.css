@@ -1,0 +1,121 @@
+/* static/css/styles.css */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  color: #333;
+}
+.container {
+  max-width: 800px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.form-section,
+.summary-section {
+  margin-bottom: 20px;
+}
+label {
+  display: inline-block;
+  width: 150px;
+  font-weight: bold;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+input, select {
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 200px;
+}
+#positions-container {
+  margin-bottom: 20px;
+}
+.position-row {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.remove-btn {
+  background: #f44336;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  margin-left: 8px;
+  border-radius: 3px;
+}
+.remove-btn:hover {
+  background: #c9302c;
+}
+.hidden {
+  display: none;
+}
+.dropdown-container {
+  display: inline-block;
+  position: relative;
+}
+.dropdown-input {
+  width: 200px;
+  padding: 5px;
+  margin-right: 10px;
+}
+.dropdown-list {
+  position: absolute;
+  top: 30px;
+  width: 200px;
+  background: #fff;
+  border: 1px solid #aaa;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 999;
+}
+.dropdown-option {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.dropdown-option:hover {
+  background: #eee;
+}
+.price-span {
+  margin-left: 15px;
+  font-weight: bold;
+}
+#add-position-btn {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+#add-position-btn:hover {
+  background: #45a049;
+}
+.form-actions {
+  text-align: center;
+}
+.form-actions button {
+  background: #2196F3;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.form-actions button:hover {
+  background: #0b7dda;
+}
+.total-display p {
+  margin: 5px 0;
+  font-size: 1.1em;
+}

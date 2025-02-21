@@ -1,0 +1,157 @@
+[
+  {
+    "name": "E-Lab",
+    "kosten": [1.00, 0.00, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Platinenfräse",
+    "kosten": [2.00, 1.00, 0.00],
+    "Einheit": "pro angefagnene 15 Minuten + Material"
+  },
+  {
+    "name": "Lasercutter",
+    "kosten": [4.00, 1.00, 0.00],
+    "Einheit": "pro angefagnene 10 Minuten Laserzeit"
+  },
+  {
+    "name": "Kinect Ver. 1 & 2",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Next Engine",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Scan Your Head",
+    "kosten": [20.00, 10.00, 0.00],
+    "Einheit": "Pro 3 Aufnahmen"
+  },
+  {
+    "name": "Scan Your Head - Nachbearbeitung",
+    "kosten": [10.00, 5.00, 0.00],
+    "Einheit": "Pro 1h"
+  },
+  {
+    "name": "Brother Inno-is NV 10",
+    "kosten": [1.00, 0.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Brother Inno-is V3",
+    "kosten": [3.00, 1.50, 1.50],
+    "Einheit": "Pro angefangene 5000 Stiche"
+  },
+  {
+    "name": "Overlock",
+    "kosten": [3.00, 1.50, 1.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Format-Kreissäge",
+    "kosten": [6.00, 3.00, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Kapp- & Gehrungssäge",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Tischbohrmaschine",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Bandsäge",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Alle sonstigen Kleingeräte",
+    "kosten": [3.00, 1.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "Drehmaschine",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Pro ½h"
+  },
+  {
+    "name": "Fräse (in Holz/Metall-Werkstatt)",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Pro ½h"
+  },
+  {
+    "name": "Sandstrahlkabine",
+    "kosten": [2.00, 1.00, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "CNC-Fräse",
+    "kosten": [5.00, 2.50, 0.00],
+    "Einheit": "Pro ½h"
+  },
+  {
+    "name": "SLA-Drucker",
+    "kosten": [2.00, 1.00, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "SLA-Drucker Material",
+    "kosten": [0.20, 0.10, 0.07],
+    "Einheit": "pro ml"
+  },
+  {
+    "name": "FDM-Drucker",
+    "kosten": [1.00, 0.50, 0.00],
+    "Einheit": "pro Stunde"
+  },
+  {
+    "name": "FDM-Drucker Material normal",
+    "kosten": [0.03, 0.03, 0.03],
+    "Einheit": "pro Gramm"
+  },
+  {
+    "name": "FDM-Drucker Material spezial",
+    "kosten": [0.07, 0.07, 0.07],
+    "Einheit": "pro Gramm"
+  },
+  {
+    "name": "Großformat Normalpapier",
+    "kosten": [4.00, 2.00, 2.00],
+    "Einheit": "Pro 0,5m"
+  },
+  {
+    "name": "Großformat Beschichtetes Papier",
+    "kosten": [8.00, 4.00, 4.00],
+    "Einheit": "Pro 0,5m"
+  },
+  {
+    "name": "Großformat Transparentes Papier",
+    "kosten": [6.00, 3.00, 3.00],
+    "Einheit": "Pro 0,5m"
+  },
+  {
+    "name": "Großformat Fotopapier",
+    "kosten": [14.00, 7.00, 7.00],
+    "Einheit": "Pro 0,5m"
+  },
+  {
+    "name": "Schneidplotter",
+    "kosten": [1.50, 1.50, 1.50],
+    "Einheit": "Pro 10cm"
+  },
+  {
+    "name": "Heatpress",
+    "kosten": [1.00, 0.50, 0.00],
+    "Einheit": "Tagespauschale"
+  },
+  {
+    "name": "UV-Drucker",
+    "kosten": [3.00, 3.00, 3.00],
+    "Einheit": "Pro 1 ml (zzgl. Endreinigung 10€)"
+  }
+]
