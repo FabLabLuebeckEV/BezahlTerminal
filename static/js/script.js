@@ -177,6 +177,18 @@ function recalcSummary() {
   const memberStatus = document.getElementById("mitgliedsstatus").value;
   const costIndex = membershipIndexMap[memberStatus] || 0;
 
+  // Gehe durch alle Einheiten und finde die maximale Tagespauschale
+  let maxTagespauschaleFound = 0;
+
+  rows.forEach(row => {
+    const deviceName = row.querySelector(".dropdown-input").value.trim();
+    const item = priceData.find(d => d.name === deviceName);
+
+    if (item && item.Einheit.includes("Tagespauschale")) {
+      maxTagespauschaleFound = Math.max(maxTagespauschaleFound, item.kosten[costIndex]);
+    }
+  });
+  let maxTagespauschale = 0;
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
     const mengeVal = parseFloat(row.querySelector(".menge-input").value) || 0;
@@ -199,8 +211,12 @@ function recalcSummary() {
     // Basis-Logik
     let rowTotal = 0;
     if (item.Einheit.includes("Tagespauschale")) {
-      // Tagespauschale => unabhängig von Menge
-      rowTotal = preisProE;
+        if (preisProE > maxTagespauschale && maxTagespauschaleFound === preisProE) {
+            maxTagespauschale = preisProE;
+            rowTotal = preisProE;
+        } else {
+          rowTotal = 0;
+        }
     } else if (item.Einheit.toLowerCase().includes("angefangene 10 minuten")) {
       // abgerundetes Bsp: wir gehen davon aus, dass mengeVal = Minuten
       // => parted = aufrunden(mengeVal / 10)
