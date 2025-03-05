@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import os
 import json
 import random
@@ -43,6 +44,7 @@ def write_to_csv(data_dict):
     file_exists = os.path.exists(CSV_FILE_PATH)
     with open(CSV_FILE_PATH, "a", newline="", encoding="utf-8") as f:
         fieldnames = [
+            "datum",
             "rechnungsnummer",
             "name",
             "mitgliedsstatus",
@@ -152,6 +154,7 @@ def index():
             rechnungsnummer = generate_unique_invoice_number()
 
         data_dict = {
+            "datum": datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
             "rechnungsnummer": rechnungsnummer,
             "name": name,
             "mitgliedsstatus": mitgliedsstatus,
