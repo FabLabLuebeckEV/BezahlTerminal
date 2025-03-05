@@ -153,5 +153,130 @@
     "name": "UV-Drucker",
     "kosten": [3.00, 3.00, 3.00],
     "Einheit": "Pro 1 ml (zzgl. Endreinigung 10€)"
+  },
+  {
+    "name": "Makercard",
+    "kosten": [2.00, 2.00, 2.00],
+    "Einheit": "Pro Karte"
+  },
+  {
+    "name": "E-Lab Einweisung",
+    "kosten": [0.0, 0.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Platinenfräse Einweisung",
+    "kosten": [15.0, 7.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Lasercutter Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "3DScan Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Next Engine Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Scan Your Head Einweisung",
+    "kosten": [20.0, 10.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Brother Inno-is NV 10 Einweisung",
+    "kosten": [0.0, 0.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Brother Inno-is V3 Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Overlock Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Format-Kreissäge Einweisung",
+    "kosten": [20.0, 10.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Kapp- & Gehrungssäge Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Tischbohrmaschine Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Bandsäge Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Alle sonstigen Kleingeräte Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Drehmaschine Einweisung",
+    "kosten": [50.0, 25.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Fräse Einweisung",
+    "kosten": [50.0, 25.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Sandstrahlkabine Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "CNC-Fräse Einweisung",
+    "kosten": [50.0, 25.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "SLA-Drucker Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "FDM-Drucker Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Großformatdrucker Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Schneidplotter Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Heatpress Einweisung",
+    "kosten": [0.0, 0.0, 0.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "UV-Drucker Einweisung",
+    "kosten": [15.0, 7.5, 0.0],
+    "Einheit": "einmalig"
   }
 ]

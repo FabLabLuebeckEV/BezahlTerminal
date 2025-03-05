@@ -9,7 +9,6 @@
 <div class="container">
   <h1>FabLab Abrechnung</h1>
 
-  <!-- Platz für Flask flash messages -->
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul style="color: green;">
@@ -20,10 +19,7 @@
     {% endif %}
   {% endwith %}
 
-  <!--
-       priceData als JavaScript-Variable verfügbar machen,
-       so dass wir es clientseitig nutzen können.
-  -->
+  <!-- Preis-Daten als JS-Variable von Flask -->
   <script>
     const priceData = {{ price_data | tojson }};
   </script>
@@ -34,7 +30,6 @@
       <input type="text" name="name" id="name" required />
 
       <label for="mitgliedsstatus">Mitgliedsstatus:</label>
-      <!-- Beachte: Wir gehen davon aus, dass 0 = Nichtmitglied, 1 = Fördermitglied, 2 = Ordentliches Mitglied -->
       <select name="mitgliedsstatus" id="mitgliedsstatus">
         <option value="Nichtmitglied">Nichtmitglied</option>
         <option value="Fördermitglied">Fördermitglied</option>
@@ -48,7 +43,6 @@
       </select>
     </div>
 
-    <!-- Hinweis bei Karte -->
     <div id="card-hinweis" class="hidden">
       <p style="color:red;">
         Bitte diese Rechnungsnummer beim SumUp-Terminal angeben:
@@ -75,7 +69,6 @@
   </form>
 </div>
 
-<!-- JavaScript -->
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

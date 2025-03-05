@@ -3,6 +3,7 @@ import os
 import json
 import random
 import string
+import math
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
@@ -14,7 +15,8 @@ PRICES_JSON_PATH = "Preise.json"
 with open(PRICES_JSON_PATH, "r", encoding="utf-8") as f:
     price_data = json.load(f)
 
-# Mapping: So interpretieren wir die Indizes in price_data[x]["kosten"]
+# Mapping: Wir gehen davon aus, dass price_data[x]["kosten"]
+# in der Reihenfolge [Nichtmitglied, Fördermitglied, Ordentliches Mitglied] steht.
 membership_index = {
     "Nichtmitglied": 0,
     "Fördermitglied": 1,
@@ -65,84 +67,86 @@ def index():
         bezahlter_betrag = float(request.form.get("bezahlter_betrag", 0.0))
 
         # Alle Positionen auslesen
-        # Wir suchen z.B. nach feldern "position_name_0, position_name_1, ..." und "menge_0, menge_1, ...".
-        # Dann bauen wir uns die Listen zusammen.
         position_names = []
         mengen = []
-
         for key, val in request.form.items():
+            # Debug-Ausgabe (kann entfernt werden)
+            print(key, val)
             if key.startswith("position_name_"):
-                # extrahiere index
                 index = key.split("_")[2]
                 position_names.append((index, val.strip()))
             elif key.startswith("menge_"):
                 index = key.split("_")[1]
                 mengen.append((index, val.strip()))
 
-        # Sortieren nach index, damit die Reihenfolge stimmt
+        # Sortieren nach Index, damit die Reihenfolge stimmt
         position_names.sort(key=lambda x: x[0])
         mengen.sort(key=lambda x: x[0])
 
         # Paare bilden
         positions = []
         for (idx_name, device_name), (idx_menge, menge_str) in zip(position_names, mengen):
-            # menge konvertieren
-            menge_val = 0.0
             try:
                 menge_val = float(menge_str)
-            except:
+            except ValueError:
                 menge_val = 0.0
             positions.append((device_name, menge_val))
 
-        # Jetzt berechnen wir die Gesamtsumme
         status_idx = membership_index.get(mitgliedsstatus, 0)
-        gesamtpreis = 0.0
 
-        # Wir bauen uns auch eine Liste für die CSV (Welche Geräte und Mengen)
+        # Erster Durchlauf: Finde den höchsten Tagespauschalenpreis
+        max_daily = 0.0
+        for device_name, _ in positions:
+            if not device_name:
+                continue
+            device_entry = next((item for item in price_data if item["name"] == device_name), None)
+            if not device_entry:
+                continue
+            einheit = device_entry["Einheit"]
+            if "tagespauschale" in einheit.lower():
+                preis = device_entry["kosten"][status_idx]
+                if preis > max_daily:
+                    max_daily = preis
+
+        # Zweiter Durchlauf: Berechne Gesamtsumme & erstelle CSV-Liste
+        gesamtpreis = 0.0
         positions_for_csv = []
+        daily_counted = False
 
         for device_name, menge_val in positions:
             if not device_name:
-                continue  # Überspringen
-
-            # Suche Eintrag in price_data
+                continue
             device_entry = next((item for item in price_data if item["name"] == device_name), None)
             if not device_entry:
-                # Unbekanntes Gerät
                 continue
-
             preis_pro_einheit = device_entry["kosten"][status_idx]
             einheit = device_entry["Einheit"]
 
-            # Tagespauschale
-            if "Tagespauschale" in einheit:
-                item_gesamt = preis_pro_einheit
-            elif "angefangene 10 Minuten" in einheit.lower():
-                # Beispiel: "pro angefangene 10 Minuten" => wir runden menge_val / 10 auf
-                # Hier vereinfachter Ansatz: menge_val (vermutlich Min.) -> parted = ceil(menge_val / 10)
-                import math
+            # Berechnung je nach Einheit
+            if "tagespauschale" in einheit.lower():
+                if not daily_counted and preis_pro_einheit == max_daily:
+                    item_gesamt = preis_pro_einheit
+                    daily_counted = True
+                else:
+                    item_gesamt = 0.0
+            elif "angefangene 10 minuten" in einheit.lower():
                 parted = math.ceil(menge_val / 10.0)
                 item_gesamt = parted * preis_pro_einheit
             elif "1/2h" in einheit.lower():
-                # z.B. "Pro 1/2h" => menge_val in Minuten? in Stunden?
-                # Das hängt von deiner Definition ab.
-                # Angenommen menge_val ist in Stunden, dann parted = ceil(menge_val / 0.5)
-                import math
                 parted = math.ceil(menge_val / 0.5)
                 item_gesamt = parted * preis_pro_einheit
             else:
-                # Normal: preis_pro_einheit * menge_val
                 item_gesamt = preis_pro_einheit * menge_val
 
             gesamtpreis += item_gesamt
             positions_for_csv.append(f"{device_name} x {menge_val} => {item_gesamt:.2f}€")
 
-        # Spende
+        # Spende berechnen
         spende = 0.0
         if bezahlter_betrag > gesamtpreis:
             spende = bezahlter_betrag - gesamtpreis
 
-        # Rechnungsnummer nur bei Karte
+        # Rechnungsnummer nur bei Kartenzahlung
         rechnungsnummer = ""
         if zahlungsmethode.lower() == "karte":
             rechnungsnummer = generate_unique_invoice_number()
@@ -153,7 +157,7 @@ def index():
             "mitgliedsstatus": mitgliedsstatus,
             "zahlungsmethode": zahlungsmethode,
             "bezahlter_betrag": f"{bezahlter_betrag:.2f}",
-            "positionen": "; ".join(positions_for_csv),  # z.B. "FDM x 2 => 2.00€; Laser x 1 => 4.00€"
+            "positionen": "; ".join(positions_for_csv),
             "berechneter_gesamtpreis": f"{gesamtpreis:.2f}",
             "spendenbetrag": f"{spende:.2f}"
         }
@@ -162,8 +166,6 @@ def index():
         flash(f"Abrechnung gespeichert! Gesamtpreis: {gesamtpreis:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}")
         return redirect(url_for("index"))
 
-    # GET: Formular anzeigen
-    # Übergib price_data ans Template (Jinja2)
     return render_template("index.html", price_data=price_data)
 
 if __name__ == "__main__":
