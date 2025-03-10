@@ -152,7 +152,12 @@
   {
     "name": "UV-Drucker",
     "kosten": [3.00, 3.00, 3.00],
-    "Einheit": "Pro 1 ml (zzgl. Endreinigung 10€)"
+    "Einheit": "Pro 1 ml"
+  },
+  {
+    "name": "UV-Drucker reinigung",
+    "kosten": [10.00, 10.00, 10.00],
+    "Einheit": "Reinigung"
   },
   {
     "name": "Makercard",

@@ -5,7 +5,7 @@ import json
 import random
 import string
 import math
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 
 app = Flask(__name__)
 app.secret_key = "ersetzen_durch_einen_geheimen_schluessel"
@@ -52,13 +52,26 @@ def write_to_csv(data_dict):
             "bezahlter_betrag",
             "positionen",
             "berechneter_gesamtpreis",
-            "spendenbetrag"
+            "spendenbetrag",
+            "notiz"
         ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         if not file_exists:
             writer.writeheader()
         writer.writerow(data_dict)
 
+@app.route("/abrechnungen.csv")
+def download_abrechnungen():
+    if os.path.exists(CSV_FILE_PATH):
+        return send_file(
+            CSV_FILE_PATH,
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="abrechnungen.csv"  # für Flask 2.x; bei älteren Versionen: attachment_filename="abrechnungen.csv"
+        )
+    else:
+        flash("Die Datei 'abrechnungen.csv' wurde nicht gefunden.")
+        return redirect(url_for("index"))
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -67,6 +80,7 @@ def index():
         mitgliedsstatus = request.form.get("mitgliedsstatus", "Nichtmitglied").strip()
         zahlungsmethode = request.form.get("zahlungsmethode", "Bar").strip()
         bezahlter_betrag = float(request.form.get("bezahlter_betrag", 0.0))
+        notiz = request.form.get("notiz", "").strip()
 
         # Alle Positionen auslesen
         position_names = []
@@ -162,7 +176,8 @@ def index():
             "bezahlter_betrag": f"{bezahlter_betrag:.2f}",
             "positionen": "; ".join(positions_for_csv),
             "berechneter_gesamtpreis": f"{gesamtpreis:.2f}",
-            "spendenbetrag": f"{spende:.2f}"
+            "spendenbetrag": f"{spende:.2f}",
+            "notiz": notiz
         }
         write_to_csv(data_dict)
 
