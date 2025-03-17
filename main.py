@@ -174,9 +174,9 @@ def index():
             "mitgliedsstatus": mitgliedsstatus,
             "zahlungsmethode": zahlungsmethode,
             "bezahlter_betrag": f"{bezahlter_betrag:.2f}",
-            "positionen": "; ".join(positions_for_csv),
             "berechneter_gesamtpreis": f"{gesamtpreis:.2f}",
             "spendenbetrag": f"{spende:.2f}",
+            "positionen": "; ".join(positions_for_csv),
             "notiz": notiz
         }
         write_to_csv(data_dict)
