@@ -21,6 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
   recalcSummary();
 });
 
+document.getElementById("billing-form").addEventListener("submit", (e) => {
+  const rows = document.querySelectorAll(".position-row");
+  if (rows.length === 0) {
+    e.preventDefault();
+    alert("Es wurde keine Position hinzugefügt. Bitte fügen Sie mindestens eine Position hinzu.");
+  }
+});
+
+
 function setupHandlers() {
   document.getElementById("add-position-btn").addEventListener("click", addPositionRow);
 
