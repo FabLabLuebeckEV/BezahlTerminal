@@ -50,9 +50,9 @@ def write_to_csv(data_dict):
             "mitgliedsstatus",
             "zahlungsmethode",
             "bezahlter_betrag",
-            "positionen",
             "berechneter_gesamtpreis",
             "spendenbetrag",
+            "positionen",
             "notiz"
         ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)

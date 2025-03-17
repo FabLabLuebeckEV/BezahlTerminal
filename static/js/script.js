@@ -23,11 +23,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("billing-form").addEventListener("submit", (e) => {
   const rows = document.querySelectorAll(".position-row");
-  if (rows.length === 0) {
+  let hasFilled = false;
+  rows.forEach(row => {
+    const input = row.querySelector(".dropdown-input");
+    if (input && input.value.trim() !== "") {
+      hasFilled = true;
+    }
+  });
+  if (rows.length === 0 || !hasFilled) {
     e.preventDefault();
-    alert("Es wurde keine Position hinzugefügt. Bitte fügen Sie mindestens eine Position hinzu.");
+    alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
   }
 });
+
 
 
 function setupHandlers() {
