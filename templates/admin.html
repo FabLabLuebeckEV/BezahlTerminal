@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Abrechnungen</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+  <div class="admin-container">
+    <h1>Admin-Bereich - Abrechnungen</h1>
+
+    <!-- Filterformular -->
+    <form id="filter-form" method="GET" action="{{ url_for('admin') }}">
+      <label for="from">Von:</label>
+      <input type="date" name="from" id="from" value="{{ from_date }}">
+      <label for="to">Bis:</label>
+      <input type="date" name="to" id="to" value="{{ to_date }}">
+      <button type="submit">Filtern</button>
+    </form>
+
+    <h2>Barzahlungen</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Datum & Uhrzeit</th>
+          <th>Rechnungsnummer</th>
+          <th>Nutzungsgebühr</th>
+          <th>Buchungsnummer</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in bar_entries %}
+        <tr>
+          <td>{{ entry.datum }}</td>
+          <td>{{ entry.rechnungsnummer or "-" }}</td>
+          <td>{{ entry.berechneter_gesamtpreis }}</td>
+          <td>abb1</td>
+          <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">Download</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="sums">
+      <p>Summe Nutzungsgebühren: {{ bar_usage }}</p>
+      <p>Summe Spenden: {{ bar_spenden }}</p>
+      <p>Gesamtsumme: {{ bar_total }}</p>
+    </div>
+
+    <h2>Kartenzahlungen</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Datum & Uhrzeit</th>
+          <th>Rechnungsnummer</th>
+          <th>Nutzungsgebühr</th>
+          <th>Buchungsnummer</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in card_entries %}
+        <tr>
+          <td>{{ entry.datum }}</td>
+          <td>{{ entry.rechnungsnummer or "-" }}</td>
+          <td>{{ entry.berechneter_gesamtpreis }}</td>
+          <td>abb1</td>
+          <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">Download</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="sums">
+      <p>Summe Nutzungsgebühren: {{ card_usage }}</p>
+      <p>Summe Spenden: {{ card_spenden }}</p>
+      <p>Gesamtsumme: {{ card_total }}</p>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "header": "Beleg / Receipt",
+  "recipient": {
+    "name": "FabLab Lübeck",
+    "address": "Maria-Goeppert-Straße 9a (MFC 8) D-23562 Lübeck",
+    "contact": {
+      "Telefon": "+49 (0) 451 3909 - 911",
+      "E-Mail": "info@fablab-luebeck.de"
+    },
+    "register": {
+      "Registergericht": "Amtsgericht Lübeck",
+      "Registernummer": "VR 4101 HL"
+    }
+  },
+  "footer": "Vielen Dank für Ihre Nutzung!"
+}
