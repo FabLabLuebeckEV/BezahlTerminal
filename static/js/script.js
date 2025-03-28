@@ -32,26 +32,41 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCardHinweis();
   recalcSummary();
 
-  // Formular-Submit-Handler: Prüfen, ob mindestens eine Position ausgefüllt ist,
-  // und bei gültiger Eingabe den Button in einen Progress-Indikator verwandeln.
   document.getElementById("billing-form").addEventListener("submit", (e) => {
-    const rows = document.querySelectorAll(".position-row");
-    let hasFilled = false;
-    rows.forEach(row => {
-      const input = row.querySelector(".dropdown-input");
-      if (input && input.value.trim() !== "") {
-        hasFilled = true;
-      }
-    });
-    if (rows.length === 0 || !hasFilled) {
-      e.preventDefault();
-      alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
-    } else {
-      const submitBtn = document.querySelector(".form-actions button");
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Verarbeitung...";
+  const rows = document.querySelectorAll(".position-row");
+  let hasFilled = false;
+  rows.forEach(row => {
+    const input = row.querySelector(".dropdown-input");
+    if (input && input.value.trim() !== "") {
+      hasFilled = true;
     }
   });
+  if (rows.length === 0 || !hasFilled) {
+    e.preventDefault();
+    alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
+    return;
+  }
+
+  // Falls Zahlungsmethode "Karte" ist, Bestätigungsdialog einblenden:
+  const zahlungsmethode = document.getElementById("zahlungsmethode").value;
+  if (zahlungsmethode.toLowerCase() === "karte") {
+    const bezahlterBetrag = document.getElementById("bezahlter_betrag").value;
+    // Hole alle gefüllten Positionen
+    const positions = Array.from(document.querySelectorAll(".dropdown-input"))
+                          .map(input => input.value.trim())
+                          .filter(val => val !== "");
+    const positionsText = positions.join(", ");
+    const confirmMessage = `War die Bezahlung von ${bezahlterBetrag} € mit der Karte und dem Zweck "${document.getElementById("rechnungsnummer").innerText}" erfolgreich?`;
+    if (!confirm(confirmMessage)) {
+      e.preventDefault();
+      return;
+    }
+  }
+
+  // Submit-Button als Progress-Indikator setzen:
+  const submitBtn = document.querySelector(".form-actions button");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Verarbeitung...";
 });
 
 function setupHandlers() {
@@ -319,5 +334,4 @@ function recalcSummary() {
   if (bezahlt > subtotal) {
     spende = bezahlt - subtotal;
   }
-  document.getElementById("spende-display").textContent = spende.toFixed(2);
-}
+  document.getElementById("spende-display").textContent = spende.toFixed(2);}});
