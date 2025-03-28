@@ -1,7 +1,9 @@
 /*
   In diesem Script:
   - Erzeugen wir dynamisch Zeilen für Positionen.
-  - Jede Zeile hat jetzt name="position_name_X" und name="menge_X", damit sie im POST ankommen.
+  - Jede Zeile hat name="position_name_X" und name="menge_X", damit sie im POST ankommen.
+  - Beim Absenden wird der Button zu einem Progress-Indikator.
+  - Zudem werden bei der Auswahl von bestimmten Geräten automatisch die entsprechenden Partnergeräte ergänzt.
 */
 
 let positionCounter = 0;
@@ -13,30 +15,44 @@ const membershipIndexMap = {
   "Ordentliches Mitglied": 2
 };
 
+// Definiere die Gerätepaare (für automatische Ergänzungen)
+// Für FDM: Wenn irgendein "FDM-Drucker Material" gewählt wird, soll "FDM-Drucker" hinzugefügt werden.
+// Umgekehrt: Wenn "FDM-Drucker" gewählt wird, soll "FDM-Drucker Material normal" hinzugefügt werden.
+// Analog für SLA und UV.
+const devicePairs = [
+  { primary: "FDM-Drucker", secondary: "FDM-Drucker Material normal" },
+  { primary: "SLA-Drucker", secondary: "SLA-Drucker Material" },
+  { primary: "UV-Drucker", secondary: "UV-Drucker Reinigung" }
+];
+
 document.addEventListener("DOMContentLoaded", () => {
   setupHandlers();
-  // Eine erste Position sofort
+  // Eine erste Position sofort hinzufügen
   addPositionRow();
   updateCardHinweis();
   recalcSummary();
-});
 
-document.getElementById("billing-form").addEventListener("submit", (e) => {
-  const rows = document.querySelectorAll(".position-row");
-  let hasFilled = false;
-  rows.forEach(row => {
-    const input = row.querySelector(".dropdown-input");
-    if (input && input.value.trim() !== "") {
-      hasFilled = true;
+  // Formular-Submit-Handler: Prüfen, ob mindestens eine Position ausgefüllt ist,
+  // und bei gültiger Eingabe den Button in einen Progress-Indikator verwandeln.
+  document.getElementById("billing-form").addEventListener("submit", (e) => {
+    const rows = document.querySelectorAll(".position-row");
+    let hasFilled = false;
+    rows.forEach(row => {
+      const input = row.querySelector(".dropdown-input");
+      if (input && input.value.trim() !== "") {
+        hasFilled = true;
+      }
+    });
+    if (rows.length === 0 || !hasFilled) {
+      e.preventDefault();
+      alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
+    } else {
+      const submitBtn = document.querySelector(".form-actions button");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Verarbeitung...";
     }
   });
-  if (rows.length === 0 || !hasFilled) {
-    e.preventDefault();
-    alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
-  }
 });
-
-
 
 function setupHandlers() {
   document.getElementById("add-position-btn").addEventListener("click", addPositionRow);
@@ -77,7 +93,6 @@ function addPositionRow() {
   positionCounter++;
   const container = document.getElementById("positions-container");
 
-  // WICHTIG: Wir vergeben name="position_name_X" und name="menge_X"
   const rowDiv = document.createElement("div");
   rowDiv.classList.add("position-row");
   rowDiv.dataset.posId = positionCounter;
@@ -121,31 +136,39 @@ function addPositionRow() {
   const dropdownInput = rowDiv.querySelector(".dropdown-input");
   const dropdownList = rowDiv.querySelector(".dropdown-list");
 
-  // Beim Fokussieren: alle zeigen
   dropdownInput.addEventListener("focus", () => {
     fillDropdownList(dropdownList, dropdownInput.value);
     dropdownList.classList.remove("hidden");
   });
 
-  // Bei Eingabe: filtern
   dropdownInput.addEventListener("input", () => {
     fillDropdownList(dropdownList, dropdownInput.value);
     dropdownList.classList.remove("hidden");
   });
 
-  // Klick außerhalb => Dropdown schließen
   document.addEventListener("click", (evt) => {
     if (!rowDiv.contains(evt.target)) {
       dropdownList.classList.add("hidden");
     }
   });
 
-  // Menge => Neuberechnung
   const mengeInput = rowDiv.querySelector(".menge-input");
   mengeInput.addEventListener("input", recalcSummary);
 
   container.appendChild(rowDiv);
   recalcSummary();
+}
+
+// Hilfsfunktion: Fügt eine neue Zeile hinzu und setzt den Gerätenamen
+function addRowWithDevice(deviceName) {
+  addPositionRow();
+  const rows = document.querySelectorAll(".position-row");
+  const lastRow = rows[rows.length - 1];
+  if (lastRow) {
+    lastRow.querySelector(".dropdown-input").value = deviceName;
+    lastRow.querySelector(".dropdown-list").classList.add("hidden");
+    recalcSummary();
+  }
 }
 
 // Füllt das Dropdown mit gefilterten Einträgen
@@ -159,11 +182,12 @@ function fillDropdownList(listEl, filterValue) {
     divOpt.classList.add("dropdown-option");
     divOpt.textContent = item.name;
     divOpt.addEventListener("click", () => {
-      // Klick => Wert übernehmen
       const parentRow = listEl.closest(".position-row");
       parentRow.querySelector(".dropdown-input").value = item.name;
       listEl.classList.add("hidden");
       recalcSummary();
+      // Prüfe Geräte-Paar-Regeln
+      checkPairRules(item.name);
     });
     listEl.appendChild(divOpt);
   });
@@ -177,6 +201,56 @@ function fillDropdownList(listEl, filterValue) {
   }
 }
 
+// Prüft, ob ein gepaartes Gerät ergänzt werden muss
+function checkPairRules(selectedDevice) {
+  devicePairs.forEach(pair => {
+    // Für FDM: Falls der Secondary-Name als Teilstring im Namen vorkommt (z.B. "fdm-drucker material")
+    if (selectedDevice.toLowerCase().includes("fdm-drucker material") && pair.primary === "FDM-Drucker") {
+      // Prüfe, ob ein FDM-Drucker bereits existiert
+      let found = false;
+      document.querySelectorAll(".dropdown-input").forEach(input => {
+        if (input.value.trim() === pair.primary) {
+          found = true;
+        }
+      });
+      if (!found) {
+        addRowWithDevice(pair.primary);
+      }
+    }
+    // Umgekehrt: Falls der Primary gewählt wird, füge den Secondary hinzu (nur für FDM und für die anderen exakte Vergleiche)
+    else if (selectedDevice === pair.primary) {
+      let found = false;
+      document.querySelectorAll(".dropdown-input").forEach(input => {
+        if (pair.primary === "FDM-Drucker") {
+          // Für FDM, suche nach "fdm-drucker material" im Namen
+          if (input.value.trim().toLowerCase().includes("fdm-drucker material")) {
+            found = true;
+          }
+        } else {
+          if (input.value.trim() === pair.secondary) {
+            found = true;
+          }
+        }
+      });
+      if (!found) {
+        addRowWithDevice(pair.secondary);
+      }
+    }
+    // Analog für SLA und UV (exakte Übereinstimmung)
+    else if (selectedDevice === pair.secondary && pair.primary !== "FDM-Drucker") {
+      let found = false;
+      document.querySelectorAll(".dropdown-input").forEach(input => {
+        if (input.value.trim() === pair.primary) {
+          found = true;
+        }
+      });
+      if (!found) {
+        addRowWithDevice(pair.primary);
+      }
+    }
+  });
+}
+
 // Gesamtsumme berechnen
 function recalcSummary() {
   const rows = document.querySelectorAll(".position-row");
@@ -185,7 +259,7 @@ function recalcSummary() {
 
   let subtotal = 0;
 
-  // 1. Pass: Finde den höchsten Tagespauschalenpreis
+  // Erster Durchlauf: Finde den höchsten Tagespauschalenpreis
   let maxDaily = 0;
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
@@ -198,10 +272,9 @@ function recalcSummary() {
     }
   });
 
-  // Flag, um sicherzustellen, dass der höchste Tagespauschalenpreis nur einmal gezählt wird
   let dailyCounted = false;
 
-  // 2. Pass: Berechne den Preis pro Zeile
+  // Zweiter Durchlauf: Berechne den Preis pro Zeile
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
     const mengeVal = parseFloat(row.querySelector(".menge-input").value) || 0;
@@ -215,14 +288,11 @@ function recalcSummary() {
       return;
     }
 
-    // Zeige die Einheit an
     einheitSpan.textContent = `(${item.Einheit})`;
-
     const preisProE = item.kosten[costIndex];
     let rowTotal = 0;
 
     if (item.Einheit.toLowerCase().includes("tagespauschale")) {
-      // Nur die höchste Tagespauschale wird gezählt – und nur einmal.
       if (!dailyCounted && preisProE === maxDaily) {
         rowTotal = preisProE;
         dailyCounted = true;
@@ -230,7 +300,6 @@ function recalcSummary() {
         rowTotal = 0;
       }
     } else if (item.Einheit.toLowerCase().includes("angefangene 10 minuten")) {
-      // Rundet auf die nächste 10-Minuten-Einheit
       const parted = Math.ceil(mengeVal / 10);
       rowTotal = parted * preisProE;
     } else if (item.Einheit.toLowerCase().includes("1/2h")) {
@@ -245,7 +314,6 @@ function recalcSummary() {
   });
 
   document.getElementById("subtotal-display").textContent = subtotal.toFixed(2);
-
   const bezahlt = parseFloat(document.getElementById("bezahlter_betrag").value) || 0;
   let spende = 0;
   if (bezahlt > subtotal) {
@@ -253,4 +321,3 @@ function recalcSummary() {
   }
   document.getElementById("spende-display").textContent = spende.toFixed(2);
 }
-

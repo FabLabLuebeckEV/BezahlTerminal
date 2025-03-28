@@ -6,11 +6,14 @@ import string
 import math
 import datetime
 from functools import wraps
+from pathlib import Path
+
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file, Response
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from easyverein.models.invoice import Invoice, InvoiceCreate, InvoiceUpdate
 from easyverein.models.invoice_item import InvoiceItem, InvoiceItemCreate
+from easyverein import EasyvereinAPI
 
 app = Flask(__name__)
 app.secret_key = "ersetzen_durch_einen_geheimen_schluessel"
@@ -29,6 +32,54 @@ membership_index = {
     "Ordentliches Mitglied": 2
 }
 
+def handle_token_refresh(token):
+    print("Refreshing token")
+    print(token)
+    config['APIKEY'] = token
+    with open('config.json', 'w') as filee:
+        json.dump(config, filee)
+
+
+def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True):
+    ev_connection = EasyvereinAPI(api_key=api_key,
+                      api_version='v2.0', token_refresh_callback=handle_token_refresh, auto_refresh_token=True)  # token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
+    # Create a invoice
+    invoice_model = InvoiceCreate(
+        invNumber=file.stem,
+        totalPrice=totalPrice,
+        date=datetime.date.today(),
+        isDraft=True,
+        gross=False,
+        description="Gerätenutzung",
+        isRequest=False,
+        taxRate=0.00,
+        receiver="Sammelnutzer",
+        kind="revenue",
+    )
+    try:
+        invoice = ev_connection.invoice.create(invoice_model)
+    except Exception as e:
+        print(e)
+        return
+    try:
+        ev_connection.invoice.upload_attachment(invoice=invoice, file=file)
+        print(invoice)
+    except Exception as e:
+        print(e)
+        return
+    try:
+        update_data = InvoiceUpdate(
+            isDraft=False,
+            selectionAcc=186457852,
+            paymentInformation='cash' if isCash else 'debit',
+            #isCash?'cash':'card',
+        )
+        invoice = ev_connection.invoice.update(target=invoice, data=update_data)
+        print(invoice)
+    except Exception as e:
+        print(e)
+        return
+    #invoice = ev_connection.invoice.create_with_attachment(invoice_model, file, True)
 
 def generate_unique_invoice_number():
     while True:
@@ -269,6 +320,7 @@ def index():
 
         # PDF-Beleg generieren
         pdf_file = generate_pdf_receipt(data_dict)
+        create_invoice_with_attachment(Path(pdf_file), gesamtpreis, zahlungsmethode.lower() == "bar")
         flash(
             f"Abrechnung gespeichert! Gesamtpreis: {gesamtpreis:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}")
         return redirect(url_for("index"))
@@ -381,4 +433,18 @@ def download_pdf(filename):
 
 
 if __name__ == "__main__":
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+    api_key = config['APIKEY']
+
+    #c = EasyvereinAPI(api_key=api_key, api_version='v2.0')#token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
+    #print(c.invoice.get_by_id("190212712"))
+    #print(c.invoice.get_by_id("261090770"))
+    #print(c.invoice.get_by_id("260614666"))
+    #for n in c.invoice.get_all():
+    #    print(n)
+
+    #exit(0)
+    #check if file exists
+    #test_create_invoice_with_attachment(c, Path("pdfs/28032025131031.pdf"), 1.00)
     app.run(debug=True, host='0.0.0.0')

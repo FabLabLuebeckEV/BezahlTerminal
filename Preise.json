@@ -283,5 +283,15 @@
     "name": "UV-Drucker Einweisung",
     "kosten": [15.0, 7.5, 0.0],
     "Einheit": "einmalig"
+  },
+  {
+    "name": "Sonstiges (Notiz)",
+    "kosten": [1.0, 1.0, 1.0],
+    "Einheit": "einmalig"
+  },
+  {
+    "name": "Mio",
+    "kosten": [1.5, 1.5, 1.5],
+    "Einheit": "einmalig"
   }
 ]

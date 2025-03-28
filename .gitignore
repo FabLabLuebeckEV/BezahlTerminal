@@ -1,3 +1,4 @@
 .env
 abrechnungen.csv
 pdfs/
+config.json
