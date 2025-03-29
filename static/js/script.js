@@ -1,23 +1,22 @@
 /*
   In diesem Script:
-  - Erzeugen wir dynamisch Zeilen für Positionen.
-  - Jede Zeile hat name="position_name_X" und name="menge_X", damit sie im POST ankommen.
-  - Beim Absenden wird der Button zu einem Progress-Indikator.
-  - Bei Kartenzahlung wird ein benutzerdefinierter Modal-Bestätigungsdialog angezeigt.
-  - Zudem werden bei der Auswahl von bestimmten Geräten automatisch die entsprechenden Partnergeräte ergänzt.
+  - Dynamisches Erzeugen von Zeilen für Positionen mit name="position_name_X" und name="menge_X".
+  - Beim Absenden des Formulars wird der Button zu einem Progress-Indikator.
+  - Bei Kartenzahlung erscheint ein benutzerdefinierter Modal-Bestätigungsdialog, der den Submit pausiert.
+  - Bei der Auswahl von bestimmten Geräten werden automatisch passende Partnergeräte ergänzt.
   - Ein zusätzlicher "Clear All"-Button lädt die Seite neu.
 */
 
 let positionCounter = 0;
 
-// Mapping: Welcher Mitgliedsstatus -> Index im "kosten"-Array
+// Mapping: Mitgliedsstatus -> Index im "kosten"-Array
 const membershipIndexMap = {
   "Nichtmitglied": 0,
   "Fördermitglied": 1,
   "Ordentliches Mitglied": 2
 };
 
-// Definiere die Gerätepaare (für automatische Ergänzungen)
+// Gerätepaare für automatische Ergänzungen
 const devicePairs = [
   { primary: "FDM-Drucker", secondary: "FDM-Drucker Material normal" },
   { primary: "SLA-Drucker", secondary: "SLA-Drucker Material" },
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCardHinweis();
   recalcSummary();
 
-  // Clear All Button event (sofern im HTML vorhanden)
+  // Clear All Button (falls im HTML vorhanden)
   const clearBtn = document.getElementById("clear-all-btn");
   if (clearBtn) {
     clearBtn.addEventListener("click", () => {
@@ -38,8 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Submit-Handler: Validierung, Bestätigungsdialog und Progress-Indikator
+  // Submit-Handler: immer default verhindern, dann manuell submitten
   document.getElementById("billing-form").addEventListener("submit", async (e) => {
+    e.preventDefault(); // immer verhindern
     const rows = document.querySelectorAll(".position-row");
     let hasFilled = false;
     rows.forEach(row => {
@@ -49,20 +49,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     if (rows.length === 0 || !hasFilled) {
-      e.preventDefault();
       alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
       return;
     }
 
-    // Falls Zahlungsmethode "Karte" ist, zeige den benutzerdefinierten Bestätigungsdialog
+    // Bei Kartenzahlung: Modal-Bestätigung
     const zahlungsmethode = document.getElementById("zahlungsmethode").value;
     if (zahlungsmethode.toLowerCase() === "karte") {
       const bezahlterBetrag = document.getElementById("bezahlter_betrag").value;
       const confirmMessage = `War die Bezahlung von ${bezahlterBetrag} € mit der Karte erfolgreich?`;
       const confirmed = await customConfirm(confirmMessage);
       if (!confirmed) {
-        e.preventDefault();
-        // Reaktivieren des Submit-Buttons
         const submitBtn = document.querySelector(".form-actions button");
         submitBtn.disabled = false;
         submitBtn.textContent = "Abrechnung abschicken";
@@ -70,14 +67,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Submit-Button als Progress-Indikator setzen:
+    // Submit-Button als Progress-Indikator setzen
     const submitBtn = document.querySelector(".form-actions button");
     submitBtn.disabled = true;
     submitBtn.textContent = "Verarbeitung...";
+
+    // Nach allen Prüfungen, Formular manuell absenden
+    document.getElementById("billing-form").submit();
   });
 });
 
-// Benutzerdefinierter Bestätigungsdialog als Modal
+// Benutzerdefinierter Modal-Bestätigungsdialog
 function customConfirm(message) {
   return new Promise((resolve, reject) => {
     const modal = document.getElementById("confirm-modal");
@@ -219,7 +219,6 @@ function fillDropdownList(listEl, filterValue) {
       parentRow.querySelector(".dropdown-input").value = item.name;
       listEl.classList.add("hidden");
       recalcSummary();
-      // Prüfe Geräte-Paar-Regeln
       checkPairRules(item.name);
     });
     listEl.appendChild(divOpt);
@@ -235,7 +234,7 @@ function fillDropdownList(listEl, filterValue) {
 
 function checkPairRules(selectedDevice) {
   devicePairs.forEach(pair => {
-    // Falls bei FDM-Drucker Material (egal normal oder spezial) gewählt wird:
+    // Wenn "FDM-Drucker Material" gewählt wird, soll "FDM-Drucker" ergänzt werden.
     if (selectedDevice.toLowerCase().includes("fdm-drucker material") && pair.primary === "FDM-Drucker") {
       let found = false;
       document.querySelectorAll(".dropdown-input").forEach(input => {
@@ -285,7 +284,6 @@ function recalcSummary() {
   const memberStatus = document.getElementById("mitgliedsstatus").value;
   const costIndex = membershipIndexMap[memberStatus] || 0;
   let subtotal = 0;
-  // Erster Durchlauf: Finde den höchsten Tagespauschalenpreis
   let maxDaily = 0;
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
@@ -298,7 +296,6 @@ function recalcSummary() {
     }
   });
   let dailyCounted = false;
-  // Zweiter Durchlauf: Berechne den Preis pro Zeile
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
     const mengeVal = parseFloat(row.querySelector(".menge-input").value) || 0;
