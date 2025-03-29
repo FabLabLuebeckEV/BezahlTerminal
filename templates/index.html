@@ -69,7 +69,15 @@
     <div class="form-actions">
       <button type="submit">Abrechnung abschicken</button>
     </div>
+    <button type="button" id="clear-all-btn">Clear All</button>
   </form>
+</div>
+<div id="confirm-modal" class="modal hidden">
+  <div class="modal-content">
+    <p id="confirm-message"></p>
+    <button id="confirm-yes">Ja</button>
+    <button id="confirm-no">Nein</button>
+  </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>

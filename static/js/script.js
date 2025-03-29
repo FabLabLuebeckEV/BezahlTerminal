@@ -3,7 +3,9 @@
   - Erzeugen wir dynamisch Zeilen für Positionen.
   - Jede Zeile hat name="position_name_X" und name="menge_X", damit sie im POST ankommen.
   - Beim Absenden wird der Button zu einem Progress-Indikator.
+  - Bei Kartenzahlung wird ein benutzerdefinierter Modal-Bestätigungsdialog angezeigt.
   - Zudem werden bei der Auswahl von bestimmten Geräten automatisch die entsprechenden Partnergeräte ergänzt.
+  - Ein zusätzlicher "Clear All"-Button lädt die Seite neu.
 */
 
 let positionCounter = 0;
@@ -16,9 +18,6 @@ const membershipIndexMap = {
 };
 
 // Definiere die Gerätepaare (für automatische Ergänzungen)
-// Für FDM: Wenn irgendein "FDM-Drucker Material" gewählt wird, soll "FDM-Drucker" hinzugefügt werden.
-// Umgekehrt: Wenn "FDM-Drucker" gewählt wird, soll "FDM-Drucker Material normal" hinzugefügt werden.
-// Analog für SLA und UV.
 const devicePairs = [
   { primary: "FDM-Drucker", secondary: "FDM-Drucker Material normal" },
   { primary: "SLA-Drucker", secondary: "SLA-Drucker Material" },
@@ -27,51 +26,88 @@ const devicePairs = [
 
 document.addEventListener("DOMContentLoaded", () => {
   setupHandlers();
-  // Eine erste Position sofort hinzufügen
   addPositionRow();
   updateCardHinweis();
   recalcSummary();
 
-  document.getElementById("billing-form").addEventListener("submit", (e) => {
-  const rows = document.querySelectorAll(".position-row");
-  let hasFilled = false;
-  rows.forEach(row => {
-    const input = row.querySelector(".dropdown-input");
-    if (input && input.value.trim() !== "") {
-      hasFilled = true;
-    }
-  });
-  if (rows.length === 0 || !hasFilled) {
-    e.preventDefault();
-    alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
-    return;
+  // Clear All Button event (sofern im HTML vorhanden)
+  const clearBtn = document.getElementById("clear-all-btn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      location.reload();
+    });
   }
 
-  // Falls Zahlungsmethode "Karte" ist, Bestätigungsdialog einblenden:
-  const zahlungsmethode = document.getElementById("zahlungsmethode").value;
-  if (zahlungsmethode.toLowerCase() === "karte") {
-    const bezahlterBetrag = document.getElementById("bezahlter_betrag").value;
-    // Hole alle gefüllten Positionen
-    const positions = Array.from(document.querySelectorAll(".dropdown-input"))
-                          .map(input => input.value.trim())
-                          .filter(val => val !== "");
-    const positionsText = positions.join(", ");
-    const confirmMessage = `War die Bezahlung von ${bezahlterBetrag} € mit der Karte und dem Zweck "${document.getElementById("rechnungsnummer").innerText}" erfolgreich?`;
-    if (!confirm(confirmMessage)) {
+  // Submit-Handler: Validierung, Bestätigungsdialog und Progress-Indikator
+  document.getElementById("billing-form").addEventListener("submit", async (e) => {
+    const rows = document.querySelectorAll(".position-row");
+    let hasFilled = false;
+    rows.forEach(row => {
+      const input = row.querySelector(".dropdown-input");
+      if (input && input.value.trim() !== "") {
+        hasFilled = true;
+      }
+    });
+    if (rows.length === 0 || !hasFilled) {
       e.preventDefault();
+      alert("Es wurde keine Position ausgewählt. Bitte fügen Sie mindestens eine Position hinzu.");
       return;
     }
-  }
 
-  // Submit-Button als Progress-Indikator setzen:
-  const submitBtn = document.querySelector(".form-actions button");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Verarbeitung...";
+    // Falls Zahlungsmethode "Karte" ist, zeige den benutzerdefinierten Bestätigungsdialog
+    const zahlungsmethode = document.getElementById("zahlungsmethode").value;
+    if (zahlungsmethode.toLowerCase() === "karte") {
+      const bezahlterBetrag = document.getElementById("bezahlter_betrag").value;
+      const confirmMessage = `War die Bezahlung von ${bezahlterBetrag} € mit der Karte erfolgreich?`;
+      const confirmed = await customConfirm(confirmMessage);
+      if (!confirmed) {
+        e.preventDefault();
+        // Reaktivieren des Submit-Buttons
+        const submitBtn = document.querySelector(".form-actions button");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Abrechnung abschicken";
+        return;
+      }
+    }
+
+    // Submit-Button als Progress-Indikator setzen:
+    const submitBtn = document.querySelector(".form-actions button");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Verarbeitung...";
+  });
 });
+
+// Benutzerdefinierter Bestätigungsdialog als Modal
+function customConfirm(message) {
+  return new Promise((resolve, reject) => {
+    const modal = document.getElementById("confirm-modal");
+    const messageEl = document.getElementById("confirm-message");
+    const yesBtn = document.getElementById("confirm-yes");
+    const noBtn = document.getElementById("confirm-no");
+
+    messageEl.textContent = message;
+    modal.classList.remove("hidden");
+
+    function cleanup() {
+      modal.classList.add("hidden");
+      yesBtn.removeEventListener("click", onYes);
+      noBtn.removeEventListener("click", onNo);
+    }
+    function onYes() {
+      cleanup();
+      resolve(true);
+    }
+    function onNo() {
+      cleanup();
+      resolve(false);
+    }
+    yesBtn.addEventListener("click", onYes);
+    noBtn.addEventListener("click", onNo);
+  });
+}
 
 function setupHandlers() {
   document.getElementById("add-position-btn").addEventListener("click", addPositionRow);
-
   document.getElementById("mitgliedsstatus").addEventListener("change", recalcSummary);
   document.getElementById("zahlungsmethode").addEventListener("change", () => {
     updateCardHinweis();
@@ -84,7 +120,6 @@ function updateCardHinweis() {
   const payMethod = document.getElementById("zahlungsmethode").value;
   const cardHinweis = document.getElementById("card-hinweis");
   const rnSpan = document.getElementById("rechnungsnummer");
-
   if (payMethod === "Karte") {
     cardHinweis.classList.remove("hidden");
     rnSpan.textContent = generateRechnungsnr();
@@ -103,15 +138,12 @@ function generateRechnungsnr() {
   return result;
 }
 
-// Fügt eine neue Position-Row hinzu
 function addPositionRow() {
   positionCounter++;
   const container = document.getElementById("positions-container");
-
   const rowDiv = document.createElement("div");
   rowDiv.classList.add("position-row");
   rowDiv.dataset.posId = positionCounter;
-
   rowDiv.innerHTML = `
     <div>
       <label>Gerät/Material:</label>
@@ -124,7 +156,6 @@ function addPositionRow() {
         />
         <div class="dropdown-list hidden"></div>
       </div>
-
       <label>Menge:</label>
       <input
         type="number"
@@ -134,47 +165,36 @@ function addPositionRow() {
         value="1"
         style="width:80px;"
       />
-
       <span class="einheit-span"></span>
       <span class="price-span">0.00 €</span>
       <button type="button" class="remove-btn">Entfernen</button>
     </div>
   `;
-
-  // Remove-Handler
   rowDiv.querySelector(".remove-btn").addEventListener("click", () => {
     container.removeChild(rowDiv);
     recalcSummary();
   });
-
-  // Setup fürs "Dropdown mit Filter"
   const dropdownInput = rowDiv.querySelector(".dropdown-input");
   const dropdownList = rowDiv.querySelector(".dropdown-list");
-
   dropdownInput.addEventListener("focus", () => {
     fillDropdownList(dropdownList, dropdownInput.value);
     dropdownList.classList.remove("hidden");
   });
-
   dropdownInput.addEventListener("input", () => {
     fillDropdownList(dropdownList, dropdownInput.value);
     dropdownList.classList.remove("hidden");
   });
-
   document.addEventListener("click", (evt) => {
     if (!rowDiv.contains(evt.target)) {
       dropdownList.classList.add("hidden");
     }
   });
-
   const mengeInput = rowDiv.querySelector(".menge-input");
   mengeInput.addEventListener("input", recalcSummary);
-
   container.appendChild(rowDiv);
   recalcSummary();
 }
 
-// Hilfsfunktion: Fügt eine neue Zeile hinzu und setzt den Gerätenamen
 function addRowWithDevice(deviceName) {
   addPositionRow();
   const rows = document.querySelectorAll(".position-row");
@@ -186,11 +206,9 @@ function addRowWithDevice(deviceName) {
   }
 }
 
-// Füllt das Dropdown mit gefilterten Einträgen
 function fillDropdownList(listEl, filterValue) {
   const val = filterValue.toLowerCase().trim();
   listEl.innerHTML = "";
-
   const filteredItems = priceData.filter(item => item.name.toLowerCase().includes(val));
   filteredItems.forEach(item => {
     const divOpt = document.createElement("div");
@@ -206,7 +224,6 @@ function fillDropdownList(listEl, filterValue) {
     });
     listEl.appendChild(divOpt);
   });
-
   if (filteredItems.length === 0) {
     const divOpt = document.createElement("div");
     divOpt.classList.add("dropdown-option");
@@ -216,12 +233,10 @@ function fillDropdownList(listEl, filterValue) {
   }
 }
 
-// Prüft, ob ein gepaartes Gerät ergänzt werden muss
 function checkPairRules(selectedDevice) {
   devicePairs.forEach(pair => {
-    // Für FDM: Falls der Secondary-Name als Teilstring im Namen vorkommt (z.B. "fdm-drucker material")
+    // Falls bei FDM-Drucker Material (egal normal oder spezial) gewählt wird:
     if (selectedDevice.toLowerCase().includes("fdm-drucker material") && pair.primary === "FDM-Drucker") {
-      // Prüfe, ob ein FDM-Drucker bereits existiert
       let found = false;
       document.querySelectorAll(".dropdown-input").forEach(input => {
         if (input.value.trim() === pair.primary) {
@@ -232,12 +247,11 @@ function checkPairRules(selectedDevice) {
         addRowWithDevice(pair.primary);
       }
     }
-    // Umgekehrt: Falls der Primary gewählt wird, füge den Secondary hinzu (nur für FDM und für die anderen exakte Vergleiche)
+    // Umgekehrt: Falls der Primary gewählt wird, füge den Secondary hinzu (für FDM und exakte Vergleiche bei den anderen)
     else if (selectedDevice === pair.primary) {
       let found = false;
       document.querySelectorAll(".dropdown-input").forEach(input => {
         if (pair.primary === "FDM-Drucker") {
-          // Für FDM, suche nach "fdm-drucker material" im Namen
           if (input.value.trim().toLowerCase().includes("fdm-drucker material")) {
             found = true;
           }
@@ -251,7 +265,7 @@ function checkPairRules(selectedDevice) {
         addRowWithDevice(pair.secondary);
       }
     }
-    // Analog für SLA und UV (exakte Übereinstimmung)
+    // Analog: Falls der Secondary gewählt wird (außer FDM), ergänze den Primary
     else if (selectedDevice === pair.secondary && pair.primary !== "FDM-Drucker") {
       let found = false;
       document.querySelectorAll(".dropdown-input").forEach(input => {
@@ -266,14 +280,11 @@ function checkPairRules(selectedDevice) {
   });
 }
 
-// Gesamtsumme berechnen
 function recalcSummary() {
   const rows = document.querySelectorAll(".position-row");
   const memberStatus = document.getElementById("mitgliedsstatus").value;
   const costIndex = membershipIndexMap[memberStatus] || 0;
-
   let subtotal = 0;
-
   // Erster Durchlauf: Finde den höchsten Tagespauschalenpreis
   let maxDaily = 0;
   rows.forEach(row => {
@@ -286,27 +297,22 @@ function recalcSummary() {
       }
     }
   });
-
   let dailyCounted = false;
-
   // Zweiter Durchlauf: Berechne den Preis pro Zeile
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
     const mengeVal = parseFloat(row.querySelector(".menge-input").value) || 0;
     const einheitSpan = row.querySelector(".einheit-span");
     const priceSpan = row.querySelector(".price-span");
-
     const item = priceData.find(d => d.name === deviceName);
     if (!deviceName || !item) {
       einheitSpan.textContent = "";
       priceSpan.textContent = "0.00 €";
       return;
     }
-
     einheitSpan.textContent = `(${item.Einheit})`;
     const preisProE = item.kosten[costIndex];
     let rowTotal = 0;
-
     if (item.Einheit.toLowerCase().includes("tagespauschale")) {
       if (!dailyCounted && preisProE === maxDaily) {
         rowTotal = preisProE;
@@ -323,15 +329,14 @@ function recalcSummary() {
     } else {
       rowTotal = preisProE * mengeVal;
     }
-
     priceSpan.textContent = rowTotal.toFixed(2) + " €";
     subtotal += rowTotal;
   });
-
   document.getElementById("subtotal-display").textContent = subtotal.toFixed(2);
   const bezahlt = parseFloat(document.getElementById("bezahlter_betrag").value) || 0;
   let spende = 0;
   if (bezahlt > subtotal) {
     spende = bezahlt - subtotal;
   }
-  document.getElementById("spende-display").textContent = spende.toFixed(2);}});
+  document.getElementById("spende-display").textContent = spende.toFixed(2);
+}
