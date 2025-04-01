@@ -23,10 +23,10 @@ const devicePairs = [
   { primary: "UV-Drucker", secondary: "UV-Drucker Reinigung" }
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   setupHandlers();
   addPositionRow();
-  updateCardHinweis();
+  await updateCardHinweis();
   recalcSummary();
 
   // Clear All Button (falls im HTML vorhanden)
@@ -116,26 +116,32 @@ function setupHandlers() {
   document.getElementById("bezahlter_betrag").addEventListener("input", recalcSummary);
 }
 
-function updateCardHinweis() {
+async function updateCardHinweis() {
   const payMethod = document.getElementById("zahlungsmethode").value;
   const cardHinweis = document.getElementById("card-hinweis");
   const rnSpan = document.getElementById("rechnungsnummer");
+  const rnValue = document.getElementById("rechnungsnummer-input");
+
   if (payMethod === "Karte") {
     cardHinweis.classList.remove("hidden");
-    rnSpan.textContent = generateRechnungsnr();
+    let rnV = await generateRechnungsnr();
+    rnSpan.textContent = rnV;
+    rnValue.value = rnV;
   } else {
     cardHinweis.classList.add("hidden");
     rnSpan.textContent = "";
   }
 }
 
-function generateRechnungsnr() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let result = "";
-  for (let i = 0; i < 4; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
+async function generateRechnungsnr() {
+  try {
+    const response = await fetch("/api/generate_invoice_number");
+    const data = await response.json();
+    return data.invoice_number;
+  } catch (error) {
+    console.error("Fehler beim Generieren der Rechnungsnummer:", error);
+    return "";
   }
-  return result;
 }
 
 function addPositionRow() {
@@ -209,7 +215,16 @@ function addRowWithDevice(deviceName) {
 function fillDropdownList(listEl, filterValue) {
   const val = filterValue.toLowerCase().trim();
   listEl.innerHTML = "";
-  const filteredItems = priceData.filter(item => item.name.toLowerCase().includes(val));
+
+  const filteredItems = priceData.filter(item => {
+    const nameMatches = item.name.toLowerCase().includes(val);
+    let keywordMatches = false;
+    if (item.keywords && Array.isArray(item.keywords)) {
+      keywordMatches = item.keywords.some(keyword => keyword.toLowerCase().includes(val));
+    }
+    return nameMatches || keywordMatches;
+  });
+
   filteredItems.forEach(item => {
     const divOpt = document.createElement("div");
     divOpt.classList.add("dropdown-option");
@@ -219,10 +234,12 @@ function fillDropdownList(listEl, filterValue) {
       parentRow.querySelector(".dropdown-input").value = item.name;
       listEl.classList.add("hidden");
       recalcSummary();
+      // Prüfe Geräte-Paar-Regeln
       checkPairRules(item.name);
     });
     listEl.appendChild(divOpt);
   });
+
   if (filteredItems.length === 0) {
     const divOpt = document.createElement("div");
     divOpt.classList.add("dropdown-option");
@@ -231,6 +248,7 @@ function fillDropdownList(listEl, filterValue) {
     listEl.appendChild(divOpt);
   }
 }
+
 
 function checkPairRules(selectedDevice) {
   devicePairs.forEach(pair => {
@@ -311,19 +329,10 @@ function recalcSummary() {
     const preisProE = item.kosten[costIndex];
     let rowTotal = 0;
     if (item.Einheit.toLowerCase().includes("tagespauschale")) {
-      if (!dailyCounted && preisProE === maxDaily) {
-        rowTotal = preisProE;
-        dailyCounted = true;
-      } else {
-        rowTotal = 0;
-      }
-    } else if (item.Einheit.toLowerCase().includes("angefangene 10 minuten")) {
-      const parted = Math.ceil(mengeVal / 10);
-      rowTotal = parted * preisProE;
-    } else if (item.Einheit.toLowerCase().includes("1/2h")) {
-      const parted = Math.ceil(mengeVal / 0.5);
-      rowTotal = parted * preisProE;
+      // Tagespauschale wird immer nur einmal berechnet, unabhängig von der Menge
+      rowTotal = preisProE;
     } else {
+      // Lineare Berechnung für alle anderen Einheiten
       rowTotal = preisProE * mengeVal;
     }
     priceSpan.textContent = rowTotal.toFixed(2) + " €";

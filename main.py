@@ -8,7 +8,7 @@ import datetime
 from functools import wraps
 from pathlib import Path
 
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file, Response
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, Response, jsonify
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from easyverein.models.invoice import Invoice, InvoiceCreate, InvoiceUpdate
@@ -279,12 +279,6 @@ def index():
                     daily_counted = True
                 else:
                     item_gesamt = 0.0
-            elif "angefangene 10 minuten" in einheit.lower():
-                parted = math.ceil(menge_val / 10.0)
-                item_gesamt = parted * preis_pro_einheit
-            elif "1/2h" in einheit.lower():
-                parted = math.ceil(menge_val / 0.5)
-                item_gesamt = parted * preis_pro_einheit
             else:
                 item_gesamt = preis_pro_einheit * menge_val
 
@@ -300,9 +294,9 @@ def index():
         if bezahlter_betrag > gesamtpreis:
             spende = bezahlter_betrag - gesamtpreis
 
-        rechnungsnummer = ""
-        if zahlungsmethode.lower() == "karte":
-            rechnungsnummer = generate_unique_invoice_number()
+        rechnungsnummer = request.form.get("rechnungsnummer", "").strip();
+        #if zahlungsmethode.lower() == "karte":
+        #    rechnungsnummer = generate_unique_invoice_number()
 
         data_dict = {
             "datum": datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
@@ -326,6 +320,11 @@ def index():
         return redirect(url_for("index"))
 
     return render_template("index.html", price_data=price_data)
+
+@app.route("/api/generate_invoice_number")
+def generate_invoice_number_api():
+    invoice_number = generate_unique_invoice_number()
+    return jsonify({"invoice_number": invoice_number})
 
 
 ### Einfacher HTTP Basic Auth Schutz ###

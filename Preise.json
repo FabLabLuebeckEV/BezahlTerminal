@@ -1,38 +1,45 @@
 [
   {
     "name": "E-Lab",
-    "kosten": [1.00, 0.00, 0.00],
-    "Einheit": "Tagespauschale"
+    "kosten": [1.0, 0.0, 0.0],
+    "Einheit": "Tagespauschale",
+    "keywords": ["Elektronik", "Löten", "Schaltkreis"]
   },
   {
     "name": "Platinenfräse",
-    "kosten": [2.00, 1.00, 0.00],
-    "Einheit": "pro angefagnene 15 Minuten + Material"
+    "kosten": [2.0, 1.0, 0.0],
+    "Einheit": "pro angefagnene 15 Minuten + Material",
+    "keywords": ["PCB", "Fräse", "Leiterplatte"]
   },
   {
     "name": "Lasercutter",
-    "kosten": [4.00, 1.00, 0.00],
-    "Einheit": "pro angefagnene 10 Minuten Laserzeit"
+    "kosten": [4.0, 1.0, 0.0],
+    "Einheit": "pro angefagnene 10 Minuten Laserzeit",
+    "keywords": ["Laser", "Schneiden", "Gravur"]
   },
   {
     "name": "Kinect Ver. 1 & 2",
-    "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "Tagespauschale",
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
   },
   {
     "name": "Next Engine",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
   },
   {
     "name": "Scan Your Head",
     "kosten": [20.00, 10.00, 0.00],
-    "Einheit": "Pro 3 Aufnahmen"
+    "Einheit": "Pro 3 Aufnahmen",
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
   },
   {
     "name": "Scan Your Head - Nachbearbeitung",
     "kosten": [10.00, 5.00, 0.00],
-    "Einheit": "Pro 1h"
+    "Einheit": "Pro 1h",
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
   },
   {
     "name": "Brother Inno-is NV 10",
@@ -97,12 +104,14 @@
   {
     "name": "SLA-Drucker",
     "kosten": [2.00, 1.00, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "keywords": ["3D", "Harz", "UV", "DLP"]
   },
   {
     "name": "SLA-Drucker Material",
     "kosten": [0.20, 0.10, 0.07],
-    "Einheit": "pro ml"
+    "Einheit": "pro ml",
+    "keywords": ["3D", "Harz", "UV", "DLP"]
   },
   {
     "name": "FDM-Drucker",
@@ -112,7 +121,8 @@
   {
     "name": "FDM-Drucker Material normal",
     "kosten": [0.03, 0.03, 0.03],
-    "Einheit": "pro Gramm"
+    "Einheit": "pro Gramm",
+    "keywords": ["3D", "PLA", "TPU", "PETG", "ABS", "Filament", "Material", "print"]
   },
   {
     "name": "FDM-Drucker Material spezial",
