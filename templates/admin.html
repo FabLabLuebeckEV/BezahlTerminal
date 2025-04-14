@@ -25,7 +25,7 @@
           <th>Datum & Uhrzeit</th>
           <th>Rechnungsnummer</th>
           <th>Nutzungsgebühr</th>
-          <th>Buchungsnummer</th>
+          <th>Bezahlt</th>
           <th>Download</th>
           <th>Aktion</th>
         </tr>
@@ -36,7 +36,7 @@
           <td>{{ entry.datum }}</td>
           <td>{{ entry.rechnungsnummer or "-" }}</td>
           <td>{{ entry.berechneter_gesamtpreis }}</td>
-          <td>abb1</td>
+          <td>{{ entry.bezahlter_betrag }}</td>
           <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">Download</a></td>
           <td>
             <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');">
@@ -62,7 +62,7 @@
           <th>Datum & Uhrzeit</th>
           <th>Rechnungsnummer</th>
           <th>Nutzungsgebühr</th>
-          <th>Buchungsnummer</th>
+          <th>Bezahlt</th>
           <th>Download</th>
           <th>Aktion</th>
         </tr>
@@ -73,7 +73,7 @@
           <td>{{ entry.datum }}</td>
           <td>{{ entry.rechnungsnummer or "-" }}</td>
           <td>{{ entry.berechneter_gesamtpreis }}</td>
-          <td>abb1</td>
+          <td>{{ entry.bezahlter_betrag }}</td>
           <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">Download</a></td>
           <td>
             <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');">
