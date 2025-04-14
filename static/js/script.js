@@ -24,6 +24,14 @@ const devicePairs = [
 ];
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const rnInput = document.getElementById("rechnungsnummer-input");
+  const rnSpan = document.getElementById("rechnungsnummer");
+
+  if (!rnInput.value) {
+    const newRn = await generateRechnungsnr();
+    rnInput.value = newRn;
+    rnSpan.textContent = newRn; // Nur sichtbar bei Karte, sonst bleibt es leer
+  }
   setupHandlers();
   addPositionRow();
   await updateCardHinweis();
@@ -124,7 +132,10 @@ async function updateCardHinweis() {
 
   if (payMethod === "Karte") {
     cardHinweis.classList.remove("hidden");
-    let rnV = await generateRechnungsnr();
+    let rnV = rnValue.value;
+    if (!rnValue.value) {
+      rnV = await generateRechnungsnr();
+    }
     rnSpan.textContent = rnV;
     rnValue.value = rnV;
   } else {
@@ -301,7 +312,8 @@ function recalcSummary() {
   const rows = document.querySelectorAll(".position-row");
   const memberStatus = document.getElementById("mitgliedsstatus").value;
   const costIndex = membershipIndexMap[memberStatus] || 0;
-  let subtotal = 0;
+
+  // 1. Finde höchste Tagespauschale
   let maxDaily = 0;
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
@@ -313,32 +325,44 @@ function recalcSummary() {
       }
     }
   });
-  let dailyCounted = false;
+
+  // 2. Berechne Gesamtsumme
+  let subtotal = 0;
+  let dailyApplied = false;
   rows.forEach(row => {
     const deviceName = row.querySelector(".dropdown-input").value.trim();
     const mengeVal = parseFloat(row.querySelector(".menge-input").value) || 0;
     const einheitSpan = row.querySelector(".einheit-span");
     const priceSpan = row.querySelector(".price-span");
     const item = priceData.find(d => d.name === deviceName);
+
     if (!deviceName || !item) {
       einheitSpan.textContent = "";
       priceSpan.textContent = "0.00 €";
       return;
     }
+
     einheitSpan.textContent = `(${item.Einheit})`;
     const preisProE = item.kosten[costIndex];
     let rowTotal = 0;
+
     if (item.Einheit.toLowerCase().includes("tagespauschale")) {
-      // Tagespauschale wird immer nur einmal berechnet, unabhängig von der Menge
-      rowTotal = preisProE;
+      if (!dailyApplied && preisProE === maxDaily) {
+        rowTotal = preisProE;
+        dailyApplied = true;
+      } else {
+        rowTotal = 0;
+      }
     } else {
-      // Lineare Berechnung für alle anderen Einheiten
       rowTotal = preisProE * mengeVal;
     }
+
     priceSpan.textContent = rowTotal.toFixed(2) + " €";
     subtotal += rowTotal;
   });
+
   document.getElementById("subtotal-display").textContent = subtotal.toFixed(2);
+
   const bezahlt = parseFloat(document.getElementById("bezahlter_betrag").value) || 0;
   let spende = 0;
   if (bezahlt > subtotal) {
@@ -346,3 +370,4 @@ function recalcSummary() {
   }
   document.getElementById("spende-display").textContent = spende.toFixed(2);
 }
+

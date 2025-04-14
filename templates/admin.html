@@ -27,6 +27,7 @@
           <th>Nutzungsgebühr</th>
           <th>Buchungsnummer</th>
           <th>Download</th>
+          <th>Aktion</th>
         </tr>
       </thead>
       <tbody>
@@ -37,6 +38,13 @@
           <td>{{ entry.berechneter_gesamtpreis }}</td>
           <td>abb1</td>
           <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">Download</a></td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');">
+              <input type="hidden" name="timestamp" value="{{ entry.datum }}">
+              <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
+              <button type="submit">Löschen</button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -56,6 +64,7 @@
           <th>Nutzungsgebühr</th>
           <th>Buchungsnummer</th>
           <th>Download</th>
+          <th>Aktion</th>
         </tr>
       </thead>
       <tbody>
@@ -66,6 +75,13 @@
           <td>{{ entry.berechneter_gesamtpreis }}</td>
           <td>abb1</td>
           <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">Download</a></td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');">
+              <input type="hidden" name="timestamp" value="{{ entry.datum }}">
+              <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
+              <button type="submit">Löschen</button>
+            </form>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

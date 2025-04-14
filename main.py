@@ -414,6 +414,58 @@ def admin():
     )
 
 
+@app.route("/delete-entry", methods=["POST"])
+@requires_auth
+def delete_entry():
+    timestamp = request.form.get("timestamp")
+    rechnungsnummer = request.form.get("rechnungsnummer")
+
+    if not timestamp:
+        flash("Kein Zeitstempel angegeben.")
+        return redirect(url_for("admin"))
+
+    try:
+        dt = datetime.datetime.strptime(timestamp, "%d.%m.%Y %H:%M:%S")
+        pdf_name = dt.strftime("%d%m%Y%H%M%S") + ".pdf"
+    except Exception:
+        flash("Ungültiges Datumsformat.")
+        return redirect(url_for("admin"))
+
+    # 1. CSV neu schreiben ohne den zu löschenden Eintrag
+    entries = []
+    if os.path.exists(CSV_FILE_PATH):
+        with open(CSV_FILE_PATH, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row["datum"] != timestamp:
+                    entries.append(row)
+
+    # Überschreibe Datei
+    with open(CSV_FILE_PATH, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "datum",
+            "rechnungsnummer",
+            "name",
+            "mitgliedsstatus",
+            "zahlungsmethode",
+            "bezahlter_betrag",
+            "berechneter_gesamtpreis",
+            "spendenbetrag",
+            "positionen",
+            "notiz"
+        ])
+        writer.writeheader()
+        writer.writerows(entries)
+
+    # 2. PDF löschen (falls vorhanden)
+    pdf_path = os.path.join("pdfs", pdf_name)
+    if os.path.exists(pdf_path):
+        os.remove(pdf_path)
+
+    flash(f"Eintrag vom {timestamp} wurde gelöscht.")
+    return redirect(url_for("admin"))
+
+
 ### Route zum Download einer PDF ###
 @app.route("/download/<filename>")
 @requires_auth
