@@ -20,7 +20,7 @@ const membershipIndexMap = {
 const devicePairs = [
   { primary: "FDM-Drucker", secondary: "FDM-Drucker Material normal" },
   { primary: "SLA-Drucker", secondary: "SLA-Drucker Material" },
-  { primary: "UV-Drucker", secondary: "UV-Drucker Reinigung" }
+  { primary: "UV-Drucker", secondary: "UV-Drucker reinigung" }
 ];
 
 document.addEventListener("DOMContentLoaded", async () => {
