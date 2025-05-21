@@ -14,7 +14,8 @@ from reportlab.lib.pagesizes import A4
 from easyverein.models.invoice import Invoice, InvoiceCreate, InvoiceUpdate
 from easyverein.models.invoice_item import InvoiceItem, InvoiceItemCreate
 from easyverein import EasyvereinAPI
-
+import logging
+logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 app.secret_key = "ersetzen_durch_einen_geheimen_schluessel"
 
@@ -33,15 +34,15 @@ membership_index = {
 }
 
 def handle_token_refresh(token):
-    print("Refreshing token")
-    print(token)
+    logging.info("Refreshing token")
+    logging.info(token)
     config['APIKEY'] = token
     with open('config.json', 'w') as filee:
         json.dump(config, filee)
 
 
 def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True):
-    print("Try: Generating invoice with attachment")
+    logging.info("Try: Generating invoice with attachment")
     ev_connection = EasyvereinAPI(api_key=api_key,
                       api_version='v2.0', token_refresh_callback=handle_token_refresh, auto_refresh_token=True)  # token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
     # Create a invoice
@@ -60,15 +61,13 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
     try:
         invoice = ev_connection.invoice.create(invoice_model)
     except Exception as e:
-        print("Error creating invoice")
-        print(e)
+        logging.error("Error creating invoice", exc_info=True)
         return
     try:
         ev_connection.invoice.upload_attachment(invoice=invoice, file=file)
-        print(invoice)
+        logging.info(invoice)
     except Exception as e:
-        print("Error uploading attachment")
-        print(e)
+        logging.error("Error uploading invoice", exc_info=True)
         return
     try:
         update_data = InvoiceUpdate(
@@ -78,10 +77,9 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
             #isCash?'cash':'card',
         )
         invoice = ev_connection.invoice.update(target=invoice, data=update_data)
-        print(invoice)
+        logging.info(invoice)
     except Exception as e:
-        print("Error updating invoice")
-        print(e)
+        logging.error("Error updating invoice", exc_info=True)
         return
     #invoice = ev_connection.invoice.create_with_attachment(invoice_model, file, True)
     #print(invoice)
