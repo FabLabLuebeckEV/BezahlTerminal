@@ -41,6 +41,7 @@ def handle_token_refresh(token):
 
 
 def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True):
+    print("Try: Generating invoice with attachment")
     ev_connection = EasyvereinAPI(api_key=api_key,
                       api_version='v2.0', token_refresh_callback=handle_token_refresh, auto_refresh_token=True)  # token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
     # Create a invoice
@@ -59,12 +60,14 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
     try:
         invoice = ev_connection.invoice.create(invoice_model)
     except Exception as e:
+        print("Error creating invoice")
         print(e)
         return
     try:
         ev_connection.invoice.upload_attachment(invoice=invoice, file=file)
         print(invoice)
     except Exception as e:
+        print("Error uploading attachment")
         print(e)
         return
     try:
@@ -77,9 +80,11 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
         invoice = ev_connection.invoice.update(target=invoice, data=update_data)
         print(invoice)
     except Exception as e:
+        print("Error updating invoice")
         print(e)
         return
     #invoice = ev_connection.invoice.create_with_attachment(invoice_model, file, True)
+    #print(invoice)
 
 def generate_unique_invoice_number():
     while True:
