@@ -3,7 +3,8 @@
     "name": "E-Lab",
     "kosten": [1.0, 0.0, 0.0],
     "Einheit": "Tagespauschale",
-    "keywords": ["Elektronik", "Löten", "Schaltkreis"]
+    "keywords": ["Elektronik", "Löten", "Schaltkreis"],
+    "kategorie": "Elektronik"
   },
   {
     "name": "Platinenfräse",
