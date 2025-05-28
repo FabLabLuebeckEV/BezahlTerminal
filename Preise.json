@@ -4,305 +4,363 @@
     "kosten": [1.0, 0.0, 0.0],
     "Einheit": "Tagespauschale",
     "keywords": ["Elektronik", "Löten", "Schaltkreis"],
-    "kategorie": "Elektronik"
+    "kategorie": "E-Ecke"
   },
   {
     "name": "Platinenfräse",
     "kosten": [2.0, 1.0, 0.0],
     "Einheit": "pro angefagnene 15 Minuten + Material",
-    "keywords": ["PCB", "Fräse", "Leiterplatte"]
+    "keywords": ["PCB", "Fräse", "Leiterplatte"],
+    "kategorie": "E-Ecke"
   },
   {
     "name": "Lasercutter",
     "kosten": [4.0, 1.0, 0.0],
     "Einheit": "pro angefagnene 10 Minuten Laserzeit",
-    "keywords": ["Laser", "Schneiden", "Gravur"]
+    "keywords": ["Laser", "Schneiden", "Gravur"],
+    "kategorie": "Lasercutter"
   },
   {
     "name": "Kinect Ver. 1 & 2",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "Tagespauschale",
-    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"],
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Next Engine",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Tagespauschale",
-    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"],
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Scan Your Head",
     "kosten": [20.00, 10.00, 0.00],
     "Einheit": "Pro 3 Aufnahmen",
-    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"],
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Scan Your Head - Nachbearbeitung",
     "kosten": [10.00, 5.00, 0.00],
     "Einheit": "Pro 1h",
-    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"]
+    "keywords": ["3D", "Bewegung", "Scan", "Tiefensensor"],
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Brother Inno-is NV 10",
     "kosten": [1.00, 0.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Textilbereich"
   },
   {
     "name": "Brother Inno-is V3",
     "kosten": [3.00, 1.50, 1.50],
-    "Einheit": "Pro angefangene 5000 Stiche"
+    "Einheit": "Pro angefangene 5000 Stiche",
+    "kategorie": "Textilbereich"
   },
   {
     "name": "Overlock",
     "kosten": [3.00, 1.50, 1.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Textilbereich"
   },
   {
     "name": "Format-Kreissäge",
     "kosten": [6.00, 3.00, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Kapp- & Gehrungssäge",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Tischbohrmaschine",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Bandsäge",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Alle sonstigen Kleingeräte",
     "kosten": [3.00, 1.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Allg. Büro- und Werkstattausstattung"
   },
   {
     "name": "Drehmaschine",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Pro ½h"
+    "Einheit": "Pro ½h",
+    "kategorie": "Metallwerkstatt"
   },
   {
     "name": "Fräse (in Holz/Metall-Werkstatt)",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Pro ½h"
+    "Einheit": "Pro ½h",
+    "kategorie": "Metallwerkstatt"
   },
   {
     "name": "Sandstrahlkabine",
     "kosten": [2.00, 1.00, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Metallwerkstatt"
   },
   {
     "name": "CNC-Fräse",
     "kosten": [5.00, 2.50, 0.00],
-    "Einheit": "Pro ½h"
+    "Einheit": "Pro ½h",
+    "kategorie": "CNC Fräse"
   },
   {
     "name": "SLA-Drucker",
     "kosten": [2.00, 1.00, 0.00],
     "Einheit": "Tagespauschale",
-    "keywords": ["3D", "Harz", "UV", "DLP"]
+    "keywords": ["3D", "Harz", "UV", "DLP"],
+    "kategorie": "SLA 3D-Drucker"
   },
   {
     "name": "SLA-Drucker Material",
     "kosten": [0.20, 0.10, 0.07],
     "Einheit": "pro ml",
-    "keywords": ["3D", "Harz", "UV", "DLP"]
+    "keywords": ["3D", "Harz", "UV", "DLP"],
+    "kategorie": "SLA 3D-Drucker"
   },
   {
     "name": "FDM-Drucker",
     "kosten": [1.00, 0.50, 0.00],
-    "Einheit": "pro Stunde"
+    "Einheit": "pro Stunde",
+    "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "FDM-Drucker Material normal",
     "kosten": [0.03, 0.03, 0.03],
     "Einheit": "pro Gramm",
-    "keywords": ["3D", "PLA", "TPU", "PETG", "ABS", "Filament", "Material", "print"]
+    "keywords": ["3D", "PLA", "TPU", "PETG", "ABS", "Filament", "Material", "print"],
+    "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "FDM-Drucker Material spezial",
     "kosten": [0.07, 0.07, 0.07],
-    "Einheit": "pro Gramm"
+    "Einheit": "pro Gramm",
+    "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "Großformat Normalpapier",
     "kosten": [4.00, 2.00, 2.00],
-    "Einheit": "Pro 0,5m"
+    "Einheit": "Pro 0,5m",
+    "kategorie": "Großformatdrucker"
   },
   {
     "name": "Großformat Beschichtetes Papier",
     "kosten": [8.00, 4.00, 4.00],
-    "Einheit": "Pro 0,5m"
+    "Einheit": "Pro 0,5m",
+    "kategorie": "Großformatdrucker"
   },
   {
     "name": "Großformat Transparentes Papier",
     "kosten": [6.00, 3.00, 3.00],
-    "Einheit": "Pro 0,5m"
+    "Einheit": "Pro 0,5m",
+    "kategorie": "Großformatdrucker"
   },
   {
     "name": "Großformat Fotopapier",
     "kosten": [14.00, 7.00, 7.00],
-    "Einheit": "Pro 0,5m"
+    "Einheit": "Pro 0,5m",
+    "kategorie": "Großformatdrucker"
   },
   {
     "name": "Schneidplotter",
     "kosten": [1.50, 1.50, 1.50],
-    "Einheit": "Pro 10cm"
+    "Einheit": "Pro 10cm",
+    "kategorie": "Folienplotter/Heatpress"
   },
   {
     "name": "Heatpress",
     "kosten": [1.00, 0.50, 0.00],
-    "Einheit": "Tagespauschale"
+    "Einheit": "Tagespauschale",
+    "kategorie": "Folienplotter/Heatpress"
   },
   {
     "name": "UV-Drucker",
     "kosten": [3.00, 3.00, 3.00],
-    "Einheit": "Pro 1 ml"
+    "Einheit": "Pro 1 ml",
+    "kategorie": "UV-Drucker"
   },
   {
     "name": "UV-Drucker reinigung",
     "kosten": [10.00, 10.00, 10.00],
-    "Einheit": "Reinigung"
+    "Einheit": "Reinigung",
+    "kategorie": "UV-Drucker"
   },
   {
     "name": "Makercard",
     "kosten": [2.00, 2.00, 2.00],
-    "Einheit": "Pro Karte"
+    "Einheit": "Pro Karte",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "E-Lab Einweisung",
     "kosten": [0.0, 0.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Platinenfräse Einweisung",
     "kosten": [15.0, 7.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Lasercutter Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "3DScan Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Next Engine Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Scan Your Head Einweisung",
     "kosten": [20.0, 10.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Brother Inno-is NV 10 Einweisung",
     "kosten": [0.0, 0.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Brother Inno-is V3 Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Overlock Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Format-Kreissäge Einweisung",
     "kosten": [20.0, 10.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Kapp- & Gehrungssäge Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Tischbohrmaschine Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Bandsäge Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Alle sonstigen Kleingeräte Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Drehmaschine Einweisung",
     "kosten": [50.0, 25.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Fräse Einweisung",
     "kosten": [50.0, 25.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Sandstrahlkabine Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "CNC-Fräse Einweisung",
     "kosten": [50.0, 25.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "SLA-Drucker Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "FDM-Drucker Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Großformatdrucker Einweisung",
     "kosten": [5.0, 2.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Schneidplotter Einweisung",
     "kosten": [10.0, 5.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Heatpress Einweisung",
     "kosten": [0.0, 0.0, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "UV-Drucker Einweisung",
     "kosten": [15.0, 7.5, 0.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
     "name": "Sonstiges (Notiz)",
     "kosten": [1.0, 1.0, 1.0],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": ""
   },
   {
     "name": "Mio",
     "kosten": [1.5, 1.5, 1.5],
-    "Einheit": "einmalig"
+    "Einheit": "einmalig",
+    "kategorie": ""
   }
 ]
