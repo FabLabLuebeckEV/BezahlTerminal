@@ -92,6 +92,58 @@
       <p>Gesamtsumme: {{ card_total }}</p>
     </div>
   </div>
+  <h2>Kategorienauswertung (Barzahlungen)</h2>
+{% for kategorie, eintraege in kategorien_daten_bar.items() %}
+  <h3>{{ kategorie }}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Rechnungsname</th>
+        <th>Betrag</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for eintrag in eintraege %}
+      <tr>
+        <td>{{ eintrag.datum }}</td>
+        <td><a href="{{ url_for('download_pdf', filename=eintrag.filename) }}">{{ eintrag.filename }}</a></td>
+        <td>{{ eintrag.betrag }} €</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="sums">
+    <p>Summe: {{ kategorien_summen_bar[kategorie] }} €</p>
+  </div>
+{% endfor %}
+
+<h2>Kategorienauswertung (Kartenzahlungen)</h2>
+{% for kategorie, eintraege in kategorien_daten_karte.items() %}
+  <h3>{{ kategorie }}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Rechnungsname</th>
+        <th>Betrag</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for eintrag in eintraege %}
+      <tr>
+        <td>{{ eintrag.datum }}</td>
+        <td><a href="{{ url_for('download_pdf', filename=eintrag.filename) }}">{{ eintrag.filename }}</a></td>
+        <td>{{ eintrag.betrag }} €</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="sums">
+    <p>Summe: {{ kategorien_summen_karte[kategorie] }} €</p>
+  </div>
+{% endfor %}
+
   <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 </body>
 </html>

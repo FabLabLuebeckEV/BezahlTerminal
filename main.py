@@ -402,6 +402,50 @@ def admin():
     bar_usage, bar_spenden, bar_total = calc_sums(bar_entries)
     card_usage, card_spenden, card_total = calc_sums(card_entries)
 
+    # === KATEGORIEN-Mapping vorbereiten ===
+    kategorien_map = {}
+    for eintrag in price_data:
+        kategorie = eintrag.get("kategorie", "").strip() or "Sonstiges"
+        kategorien_map[eintrag["name"]] = kategorie
+
+    def kategorien_auswertung(eintraege):
+        k_data = {}
+        for entry in eintraege:
+            datum = entry["datum"]
+            filename = entry["pdf_filename"]
+            positionen_text = entry.get("positionen", "")
+            if positionen_text == "Keine Positionen":
+                continue
+            for pos in positionen_text.split("; "):
+                if "=>" not in pos:
+                    continue
+                try:
+                    name_menge, betrag = pos.split("=>")
+                    betrag = float(betrag.strip().replace("€", "").replace(",", "."))
+                    gerätename = name_menge.split("x")[0].strip()
+                except Exception:
+                    continue
+
+                kategorie = kategorien_map.get(gerätename, "Sonstiges")
+                k_data.setdefault(kategorie, []).append({
+                    "datum": datum,
+                    "filename": filename,
+                    "betrag": round(betrag, 2)
+                })
+        return k_data
+
+    kategorien_daten_bar = kategorien_auswertung(bar_entries)
+    kategorien_daten_karte = kategorien_auswertung(card_entries)
+
+    kategorien_summen_bar = {
+        k: round(sum(e["betrag"] for e in v), 2)
+        for k, v in kategorien_daten_bar.items()
+    }
+    kategorien_summen_karte = {
+        k: round(sum(e["betrag"] for e in v), 2)
+        for k, v in kategorien_daten_karte.items()
+    }
+
     return render_template(
         "admin.html",
         from_date=from_date.strftime("%Y-%m-%d"),
@@ -413,8 +457,13 @@ def admin():
         bar_total=bar_total,
         card_usage=card_usage,
         card_spenden=card_spenden,
-        card_total=card_total
+        card_total=card_total,
+        kategorien_daten_bar=kategorien_daten_bar,
+        kategorien_summen_bar=kategorien_summen_bar,
+        kategorien_daten_karte=kategorien_daten_karte,
+        kategorien_summen_karte=kategorien_summen_karte
     )
+
 
 
 @app.route("/delete-entry", methods=["POST"])
