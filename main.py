@@ -413,11 +413,12 @@ def admin():
         for entry in eintraege:
             datum = entry["datum"]
             filename = entry["pdf_filename"]
+            person = entry["name"]
             positionen_text = entry.get("positionen", "")
             if positionen_text == "Keine Positionen":
                 continue
 
-            # === SPENDEN-LOGIK ===
+            # === SPENDEN ===
             try:
                 spende = float(entry.get("spendenbetrag", "0").replace(",", "."))
             except Exception:
@@ -426,10 +427,12 @@ def admin():
                 k_data.setdefault("Spenden", []).append({
                     "datum": datum,
                     "filename": filename,
-                    "betrag": round(spende, 2)
+                    "betrag": round(spende, 2),
+                    "geraet": "Spende",
+                    "name": person
                 })
 
-            # === POSITIONEN VERARBEITEN ===
+            # === POSITIONEN ===
             for pos in positionen_text.split("; "):
                 if "=>" not in pos:
                     continue
@@ -446,13 +449,14 @@ def admin():
                 k_data.setdefault(kategorie, []).append({
                     "datum": datum,
                     "filename": filename,
-                    "betrag": round(betrag, 2)
+                    "betrag": round(betrag, 2),
+                    "geraet": gerätename,
+                    "name": person
                 })
 
-        # Farbliche Gruppierung vorbereiten
+        # Farben für Rechnungen
         for kategorie, eintraege in k_data.items():
             eintraege.sort(key=lambda x: (x["filename"], x["datum"]))
-            farbgruppen = {}
             current_color = 0
             last_filename = None
             for eintrag in eintraege:
