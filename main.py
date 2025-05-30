@@ -417,6 +417,19 @@ def admin():
             if positionen_text == "Keine Positionen":
                 continue
 
+            # === SPENDEN-LOGIK ===
+            try:
+                spende = float(entry.get("spendenbetrag", "0").replace(",", "."))
+            except Exception:
+                spende = 0.0
+            if spende > 0:
+                k_data.setdefault("Spenden", []).append({
+                    "datum": datum,
+                    "filename": filename,
+                    "betrag": round(spende, 2)
+                })
+
+            # === POSITIONEN VERARBEITEN ===
             for pos in positionen_text.split("; "):
                 if "=>" not in pos:
                     continue
@@ -424,7 +437,7 @@ def admin():
                     name_menge, betrag_str = pos.split("=>")
                     betrag = float(betrag_str.strip().replace("€", "").replace(",", "."))
                     if betrag == 0:
-                        continue  # Position mit 0 Euro ignorieren
+                        continue
                     gerätename = name_menge.split("x")[0].strip()
                 except Exception:
                     continue
@@ -436,7 +449,7 @@ def admin():
                     "betrag": round(betrag, 2)
                 })
 
-        # Gruppierung für abwechselnde Farben vorbereiten
+        # Farbliche Gruppierung vorbereiten
         for kategorie, eintraege in k_data.items():
             eintraege.sort(key=lambda x: (x["filename"], x["datum"]))
             farbgruppen = {}
@@ -447,7 +460,7 @@ def admin():
                 if fn != last_filename:
                     current_color += 1
                     last_filename = fn
-                eintrag["farbe"] = current_color % 2  # 0 oder 1 für wechselndes CSS
+                eintrag["farbe"] = current_color % 2
         return k_data
 
     kategorien_daten_bar = kategorien_auswertung(bar_entries)
