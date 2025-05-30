@@ -105,9 +105,9 @@
     </thead>
     <tbody>
       {% for eintrag in eintraege %}
-      <tr>
+      <tr class="row-{{ eintrag.farbe }}">
         <td>{{ eintrag.datum }}</td>
-        <td><a href="{{ url_for('download_pdf', filename=eintrag.filename) }}">{{ eintrag.filename }}</a></td>
+        <td><a href="{{ url_for('download_pdf', filename=eintrag.filename) }}">{{ eintrag.filename[:-4] }}</a></td>
         <td>{{ eintrag.betrag }} €</td>
       </tr>
       {% endfor %}
@@ -131,9 +131,9 @@
     </thead>
     <tbody>
       {% for eintrag in eintraege %}
-      <tr>
+      <tr class="row-{{ eintrag.farbe }}">
         <td>{{ eintrag.datum }}</td>
-        <td><a href="{{ url_for('download_pdf', filename=eintrag.filename) }}">{{ eintrag.filename }}</a></td>
+        <td><a href="{{ url_for('download_pdf', filename=eintrag.filename) }}">{{ eintrag.filename[:-4] }}</a></td>
         <td>{{ eintrag.betrag }} €</td>
       </tr>
       {% endfor %}

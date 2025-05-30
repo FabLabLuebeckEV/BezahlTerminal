@@ -60,3 +60,6 @@ th, td {
   margin: 5px 0;
   font-size: 1.1em;
 }
+
+.row-0 { background-color: white; }
+.row-1 { background-color: #f0f0f0; }

@@ -211,145 +211,145 @@
     "name": "E-Lab Einweisung",
     "kosten": [0.0, 0.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "E-Ecke"
   },
   {
     "name": "Platinenfräse Einweisung",
     "kosten": [15.0, 7.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "E-Ecke"
   },
   {
     "name": "Lasercutter Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Lasercutter"
   },
   {
     "name": "3DScan Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Next Engine Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Scan Your Head Einweisung",
     "kosten": [20.0, 10.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "3D Scanner"
   },
   {
     "name": "Brother Inno-is NV 10 Einweisung",
     "kosten": [0.0, 0.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Textilbereich"
   },
   {
     "name": "Brother Inno-is V3 Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Textilbereich"
   },
   {
     "name": "Overlock Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Textilbereich"
   },
   {
     "name": "Format-Kreissäge Einweisung",
     "kosten": [20.0, 10.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Kapp- & Gehrungssäge Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Tischbohrmaschine Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Bandsäge Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Alle sonstigen Kleingeräte Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Allg. Büro- und Werkstattausstattung"
   },
   {
     "name": "Drehmaschine Einweisung",
     "kosten": [50.0, 25.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Metallwerkstatt"
   },
   {
     "name": "Fräse Einweisung",
     "kosten": [50.0, 25.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Metallwerkstatt"
   },
   {
     "name": "Sandstrahlkabine Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Metallwerkstatt"
   },
   {
     "name": "CNC-Fräse Einweisung",
     "kosten": [50.0, 25.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "CNC Fräse"
   },
   {
     "name": "SLA-Drucker Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "SLA 3D-Drucker"
   },
   {
     "name": "FDM-Drucker Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "Großformatdrucker Einweisung",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Großformatdrucker"
   },
   {
     "name": "Schneidplotter Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Folienplotter/Heatpress"
   },
   {
     "name": "Heatpress Einweisung",
     "kosten": [0.0, 0.0, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "Folienplotter/Heatpress"
   },
   {
     "name": "UV-Drucker Einweisung",
     "kosten": [15.0, 7.5, 0.0],
     "Einheit": "einmalig",
-    "kategorie": "Einweisungsgebühren/MakerCards"
+    "kategorie": "UV-Drucker"
   },
   {
     "name": "Sonstiges (Notiz)",
