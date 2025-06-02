@@ -48,11 +48,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Submit-Handler: immer default verhindern, dann manuell submitten
   document.getElementById("billing-form").addEventListener("submit", async (e) => {
     e.preventDefault(); // immer verhindern
-    if (document.getElementById("bezahlter_betrag").value < document.getElementById("subtotal-display").textContent) {
+    const bezahlterStr = document.getElementById("bezahlter_betrag").value.replace(",", ".");
+    const subtotalStr = document.getElementById("subtotal-display").textContent.replace(",", ".");
+
+    const bezahlter = parseFloat(bezahlterStr);
+    const subtotal = parseFloat(subtotalStr);
+
+    if (bezahlter < subtotal) {
       document.getElementById("bezahlter_betrag").value = document.getElementById("subtotal-display").textContent;
-      //alert("Der bezahlte Betrag ist kleiner als die Gesamtsumme. Bitte korrigieren Sie den Betrag.");
-      //return;
     }
+
     const rows = document.querySelectorAll(".position-row");
     let hasFilled = false;
     rows.forEach(row => {
