@@ -317,9 +317,9 @@ def index():
 
         # PDF-Beleg generieren
         pdf_file = generate_pdf_receipt(data_dict)
-        create_invoice_with_attachment(Path(pdf_file), gesamtpreis, zahlungsmethode.lower() == "bar")
+        create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar")
         flash(
-            f"Abrechnung gespeichert! Gesamtpreis: {gesamtpreis:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}")
+            f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}")
         return redirect(url_for("index"))
 
     return render_template("index.html", price_data=price_data)
