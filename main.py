@@ -41,7 +41,7 @@ def handle_token_refresh(token):
         json.dump(config, filee)
 
 
-def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True):
+def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True, name: string = "Sammelnutzer"):
     logging.info("Try: Generating invoice with attachment")
     ev_connection = EasyvereinAPI(api_key=api_key,
                       api_version='v2.0', token_refresh_callback=handle_token_refresh, auto_refresh_token=True)  # token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
@@ -55,7 +55,7 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
         description="Gerätenutzung",
         isRequest=False,
         taxRate=0.00,
-        receiver="Sammelnutzer",
+        receiver=name,
         kind="revenue",
     )
     try:
@@ -317,7 +317,7 @@ def index():
 
         # PDF-Beleg generieren
         pdf_file = generate_pdf_receipt(data_dict)
-        create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar")
+        create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar", name)
         flash(
             f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}")
         return redirect(url_for("index"))
