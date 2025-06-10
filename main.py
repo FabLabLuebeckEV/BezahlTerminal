@@ -14,8 +14,15 @@ from reportlab.lib.pagesizes import A4
 from easyverein.models.invoice import Invoice, InvoiceCreate, InvoiceUpdate
 from easyverein.models.invoice_item import InvoiceItem, InvoiceItemCreate
 from easyverein import EasyvereinAPI
-import logging
+import re
+import json, logging, pathlib, shutil, tempfile
 logging.basicConfig(level=logging.INFO)
+
+TOKEN_PATTERN = re.compile(r"^[0-9a-f]{40}$", re.I)   # EasyVerein-Token: 40 Hex-Zeichen
+
+CONFIG_PATH = pathlib.Path("config.json")
+CONFIG_BAK  = CONFIG_PATH.with_suffix(".bak")       # z. B. config.bak
+DEFAULT_CFG = {"APIKEY": "", "REFRESH_TOKEN": ""}
 app = Flask(__name__)
 app.secret_key = "ersetzen_durch_einen_geheimen_schluessel"
 
@@ -33,12 +40,71 @@ membership_index = {
     "Ordentliches Mitglied": 2
 }
 
-def handle_token_refresh(token):
-    logging.info("Refreshing token")
-    logging.info(token)
-    config['APIKEY'] = token
-    with open('config.json', 'w') as filee:
-        json.dump(config, filee)
+def load_config() -> dict:
+    """
+    Lädt die Konfiguration.
+    Fällt auf Backup oder Defaults zurück, wenn etwas nicht stimmt.
+    """
+    try:
+        with CONFIG_PATH.open(encoding="utf-8") as f:
+            return json.load(f) or DEFAULT_CFG
+    except FileNotFoundError:
+        logging.warning("config.json fehlt – lege neue Datei an.")
+    except json.JSONDecodeError as e:
+        logging.error("config.json defekt (%s) – versuche Backup.", e)
+        # falls ein Backup existiert, kopieren wir es zurück
+        if CONFIG_BAK.exists():
+            shutil.copy(CONFIG_BAK, CONFIG_PATH)
+            return load_config()
+    # konnte nicht geladen werden → Defaults verwenden
+    return DEFAULT_CFG
+
+
+def atomic_write_json(path: pathlib.Path, data: dict):
+    """
+    Schreibt JSON erst in eine temporäre Datei und ersetzt
+    das Original dann atomisch. Damit bleibt das alte File intakt,
+    falls der Schreibvorgang abbricht.
+    """
+    tmp_fd, tmp_name = tempfile.mkstemp(dir=path.parent, prefix=".__cfg_", suffix=".tmp")
+    try:
+        with open(tmp_fd, "w", encoding="utf-8") as tmp_file:
+            json.dump(data, tmp_file, ensure_ascii=False, indent=2)
+            tmp_file.flush()          # sicherstellen, dass alles im Puffer ist
+            os.fsync(tmp_file.fileno())
+        # Backup der aktuellen Datei anlegen
+        if path.exists():
+            shutil.copy2(path, CONFIG_BAK)
+        # Jetzt das temp-File atomisch verschieben
+        os.replace(tmp_name, path)
+    finally:
+        # Falls etwas schiefging, temporäre Datei entsorgen
+        try:
+            os.unlink(tmp_name)
+        except FileNotFoundError:
+            pass
+
+def handle_token_refresh(token: str | None):
+    """
+    Wird von EasyvereinAPI aufgerufen, wenn ein neuer Token kommt.
+    * Speichert nur **gültige** Tokens (40 Hex-Zeichen).
+    * Lässt den alten Schlüssel unangetastet, wenn der neue leer/ungültig ist.
+    """
+    if not token:
+        logging.error("Token-Refresh: Kein Token erhalten – behalte alten Wert.")
+        return
+
+    if not TOKEN_PATTERN.fullmatch(token):
+        logging.error("Token-Refresh: Ungültiges Format (%s…) – behalte alten Wert.", str(token)[:8])
+        return
+
+    # alles gut → Konfiguration aktualisieren
+    config["APIKEY"] = token
+    try:
+        atomic_write_json(CONFIG_PATH, config)        # Funktion aus vorheriger Antwort
+        logging.info("Token-Refresh: Neuer Schlüssel gespeichert.")
+    except Exception:
+        logging.exception("Token-Refresh: Konnte config.json nicht schreiben – behalte alten Wert.")
 
 
 def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True, name: string = "Sammelnutzer"):
@@ -569,9 +635,8 @@ def download_pdf(filename):
 
 
 if __name__ == "__main__":
-    with open('config.json', 'r') as file:
-        config = json.load(file)
-    api_key = config['APIKEY']
+    config = load_config()
+    api_key = config["APIKEY"]
 
     #c = EasyvereinAPI(api_key=api_key, api_version='v2.0')#token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
     #print(c.invoice.get_by_id("190212712"))
