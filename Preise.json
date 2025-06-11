@@ -21,6 +21,13 @@
     "kategorie": "Lasercutter"
   },
   {
+    "name": "Lasercutter MOPA",
+    "kosten": [4.0, 1.0, 0.0],
+    "Einheit": "pro angefagnene 10 Minuten Laserzeit",
+    "keywords": ["Laser", "Schneiden", "Gravur"],
+    "kategorie": "MOPA"
+  },
+  {
     "name": "Kinect Ver. 1 & 2",
     "kosten": [5.0, 2.5, 0.0],
     "Einheit": "Tagespauschale",
@@ -224,6 +231,12 @@
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
     "kategorie": "Lasercutter"
+  },
+  {
+    "name": "Lasercutter MOPA Einweisung",
+    "kosten": [10.0, 5.0, 0.0],
+    "Einheit": "einmalig",
+    "kategorie": "MOPA"
   },
   {
     "name": "3DScan Einweisung",
