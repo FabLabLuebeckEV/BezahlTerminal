@@ -620,6 +620,65 @@ def delete_entry():
     return redirect(url_for("admin"))
 
 
+@app.route("/reupload-invoice", methods=["POST"])
+@requires_auth
+def reupload_invoice():
+    timestamp_str = request.form.get("timestamp")
+    rechnungsnummer = request.form.get("rechnungsnummer")
+
+    if not timestamp_str or not rechnungsnummer:
+        flash("Fehlende Parameter: Zeitstempel und Rechnungsnummer sind erforderlich.", "error")
+        return redirect(url_for("admin"))
+
+    # Finde den Eintrag in der CSV
+    invoice_data = None
+    if os.path.exists(CSV_FILE_PATH):
+        with open(CSV_FILE_PATH, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Vergleiche den Datums-Teil des Timestamps und die Rechnungsnummer
+                if row["datum"] == timestamp_str and row["rechnungsnummer"] == rechnungsnummer:
+                    invoice_data = row
+                    break
+
+    if not invoice_data:
+        flash(f"Rechnung nicht gefunden für Zeitstempel {timestamp_str} and Rechnungsnummer {rechnungsnummer}.", "error")
+        return redirect(url_for("admin"))
+
+    pdf_filename_short = invoice_data.get("pdf_filename") # This comes from admin view, needs to be constructed if not present
+    if not pdf_filename_short:
+        # Konstruiere pdf_filename aus timestamp wenn nicht direkt in CSV (sollte aber da sein via admin view)
+        try:
+            dt_obj = datetime.datetime.strptime(timestamp_str, "%d.%m.%Y %H:%M:%S")
+            pdf_filename_short = dt_obj.strftime("%d%m%Y%H%M%S") + ".pdf"
+        except ValueError:
+            flash("Ungültiges Zeitstempelformat in den Daten.", "error")
+            return redirect(url_for("admin"))
+
+    pdf_full_path = Path("pdfs") / pdf_filename_short
+
+    if not pdf_full_path.exists():
+        flash(f"PDF-Datei {pdf_filename_short} nicht gefunden.", "error")
+        return redirect(url_for("admin"))
+
+    try:
+        total_price = float(invoice_data["bezahlter_betrag"].replace(",", "."))
+    except ValueError:
+        flash("Ungültiger Betrag in Rechnungsdaten.", "error")
+        return redirect(url_for("admin"))
+
+    is_cash = invoice_data["zahlungsmethode"].lower() == "bar"
+    name = invoice_data["name"]
+
+    try:
+        create_invoice_with_attachment(pdf_full_path, total_price, is_cash, name)
+        flash(f"Rechnung {rechnungsnummer} erfolgreich erneut zu EasyVerein hochgeladen.", "success")
+    except Exception as e:
+        logging.error(f"Fehler beim erneuten Hochladen der Rechnung {rechnungsnummer}: {e}", exc_info=True)
+        flash(f"Fehler beim erneuten Hochladen der Rechnung: {e}", "error")
+
+    return redirect(url_for("admin"))
+
 ### Route zum Download einer PDF ###
 @app.route("/download/<filename>")
 @requires_auth
