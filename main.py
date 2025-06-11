@@ -110,7 +110,7 @@ def handle_token_refresh(token: str | None):
         logging.exception("Token-Refresh: Konnte config.json nicht schreiben – behalte alten Wert.")
 
 
-def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True, name: string = "Sammelnutzer"):
+def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True, name: string = "Sammelnutzer", date: datetime.date = datetime.date.today()):
     logging.info("Try: Generating invoice with attachment")
     ev_connection = EasyvereinAPI(api_key=api_key,
                       api_version='v2.0', token_refresh_callback=handle_token_refresh, auto_refresh_token=True)  # token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
@@ -118,7 +118,7 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
     invoice_model = InvoiceCreate(
         invNumber=file.stem,
         totalPrice=totalPrice,
-        date=datetime.date.today(),
+        date=date,
         isDraft=True,
         gross=False,
         description="Gerätenutzung",
@@ -628,7 +628,7 @@ def reupload_invoice():
 
     if not timestamp_str or not rechnungsnummer:
         flash("Fehlende Parameter: Zeitstempel und Rechnungsnummer sind erforderlich.", "error")
-        return redirect(url_for("admin"))
+        return redirect(request.referrer or url_for("admin"))
 
     # Finde den Eintrag in der CSV
     invoice_data = None
@@ -643,7 +643,7 @@ def reupload_invoice():
 
     if not invoice_data:
         flash(f"Rechnung nicht gefunden für Zeitstempel {timestamp_str} and Rechnungsnummer {rechnungsnummer}.", "error")
-        return redirect(url_for("admin"))
+        return redirect(request.referrer or url_for("admin"))
 
     pdf_filename_short = invoice_data.get("pdf_filename") # This comes from admin view, needs to be constructed if not present
     if not pdf_filename_short:
@@ -653,31 +653,33 @@ def reupload_invoice():
             pdf_filename_short = dt_obj.strftime("%d%m%Y%H%M%S") + ".pdf"
         except ValueError:
             flash("Ungültiges Zeitstempelformat in den Daten.", "error")
-            return redirect(url_for("admin"))
+            return redirect(request.referrer or url_for("admin"))
 
     pdf_full_path = Path("pdfs") / pdf_filename_short
 
     if not pdf_full_path.exists():
         flash(f"PDF-Datei {pdf_filename_short} nicht gefunden.", "error")
-        return redirect(url_for("admin"))
+        return redirect(request.referrer or url_for("admin"))
 
     try:
         total_price = float(invoice_data["bezahlter_betrag"].replace(",", "."))
     except ValueError:
         flash("Ungültiger Betrag in Rechnungsdaten.", "error")
-        return redirect(url_for("admin"))
+        return redirect(request.referrer or url_for("admin"))
 
     is_cash = invoice_data["zahlungsmethode"].lower() == "bar"
     name = invoice_data["name"]
 
     try:
-        create_invoice_with_attachment(pdf_full_path, total_price, is_cash, name)
+        create_invoice_with_attachment(pdf_full_path, total_price, is_cash, name,
+                                       date=datetime.datetime.strptime(invoice_data["datum"], "%d.%m.%Y %H:%M:%S").date())
         flash(f"Rechnung {rechnungsnummer} erfolgreich erneut zu EasyVerein hochgeladen.", "success")
     except Exception as e:
         logging.error(f"Fehler beim erneuten Hochladen der Rechnung {rechnungsnummer}: {e}", exc_info=True)
         flash(f"Fehler beim erneuten Hochladen der Rechnung: {e}", "error")
+#zurück zu der seite von der er kam
+    return redirect(request.referrer or url_for("admin"))
 
-    return redirect(url_for("admin"))
 
 ### Route zum Download einer PDF ###
 @app.route("/download/<filename>")
