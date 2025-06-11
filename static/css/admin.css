@@ -63,3 +63,42 @@ th, td {
 
 .row-0 { background-color: white; }
 .row-1 { background-color: #f0f0f0; }
+
+/* Flash messages styles */
+.flashes {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.flashes li {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+.flash-success {
+  background-color: #d4edda; /* Light green */
+  color: #155724; /* Dark green */
+  border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+  background-color: #f8d7da; /* Light red */
+  color: #721c24; /* Dark red */
+  border: 1px solid #f5c6cb;
+}
+
+.flash-info {
+  background-color: #d1ecf1; /* Light blue */
+  color: #0c5460; /* Dark blue */
+  border: 1px solid #bee5eb;
+}
+
+.flash-warning {
+  background-color: #fff3cd; /* Light yellow */
+  color: #856404; /* Dark yellow */
+  border: 1px solid #ffeeba;
+}

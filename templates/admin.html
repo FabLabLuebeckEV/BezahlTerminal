@@ -9,6 +9,16 @@
   <div class="admin-container">
     <h1>Admin-Bereich - Abrechnungen</h1>
 
+    {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="flash-{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <!-- Filterformular -->
     <form id="filter-form" method="GET" action="{{ url_for('admin') }}">
       <label for="from">Von:</label>

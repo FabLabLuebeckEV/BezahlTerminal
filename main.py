@@ -278,7 +278,7 @@ def download_abrechnungen():
             download_name="abrechnungen.csv"
         )
     else:
-        flash("Die Datei 'abrechnungen.csv' wurde nicht gefunden.")
+        flash("Die Datei 'abrechnungen.csv' wurde nicht gefunden.", "error")
         return redirect(url_for("index"))
 
 
@@ -388,7 +388,7 @@ def index():
         pdf_file = generate_pdf_receipt(data_dict)
         create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar", name)
         flash(
-            f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}")
+            f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}", "success")
         return redirect(url_for("index"))
 
     return render_template("index.html", price_data=price_data)
@@ -575,14 +575,14 @@ def delete_entry():
     rechnungsnummer = request.form.get("rechnungsnummer")
 
     if not timestamp:
-        flash("Kein Zeitstempel angegeben.")
+        flash("Kein Zeitstempel angegeben.", "error")
         return redirect(url_for("admin"))
 
     try:
         dt = datetime.datetime.strptime(timestamp, "%d.%m.%Y %H:%M:%S")
         pdf_name = dt.strftime("%d%m%Y%H%M%S") + ".pdf"
     except Exception:
-        flash("Ungültiges Datumsformat.")
+        flash("Ungültiges Datumsformat.", "error")
         return redirect(url_for("admin"))
 
     # 1. CSV neu schreiben ohne den zu löschenden Eintrag
@@ -616,7 +616,7 @@ def delete_entry():
     if os.path.exists(pdf_path):
         os.remove(pdf_path)
 
-    flash(f"Eintrag vom {timestamp} wurde gelöscht.")
+    flash(f"Eintrag vom {timestamp} wurde gelöscht.", "success")
     return redirect(url_for("admin"))
 
 
@@ -694,7 +694,7 @@ def download_pdf(filename):
             download_name=filename
         )
     else:
-        flash("Die PDF-Datei wurde nicht gefunden.")
+        flash("Die PDF-Datei wurde nicht gefunden.", "error")
         return redirect(url_for("admin"))
 
 
