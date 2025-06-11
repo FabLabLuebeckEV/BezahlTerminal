@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const zahlungsmethode = document.getElementById("zahlungsmethode").value;
     if (zahlungsmethode.toLowerCase() === "karte") {
       const bezahlterBetrag = document.getElementById("bezahlter_betrag").value;
-      const confirmMessage = `War die Bezahlung von ${bezahlterBetrag} € mit der Karte erfolgreich?`;
+      const confirmMessage = `War die Bezahlung von der Rechnung ${rnSpan.textContent}, mit den Betrag ${bezahlterBetrag} € mit der Karte erfolgreich?`;
       const confirmed = await customConfirm(confirmMessage);
       if (!confirmed) {
         const submitBtn = document.querySelector(".form-actions button");
