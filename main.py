@@ -1,5 +1,6 @@
 import csv
 import os
+from dotenv import load_dotenv
 import json
 import random
 import string
@@ -23,8 +24,10 @@ TOKEN_PATTERN = re.compile(r"^[0-9a-f]{40}$", re.I)   # EasyVerein-Token: 40 Hex
 CONFIG_PATH = pathlib.Path("config.json")
 CONFIG_BAK  = CONFIG_PATH.with_suffix(".bak")       # z. B. config.bak
 DEFAULT_CFG = {"APIKEY": "", "REFRESH_TOKEN": ""}
+
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = "ersetzen_durch_einen_geheimen_schluessel"
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "ersetzen_durch_einen_geheimen_schluessel")
 
 CSV_FILE_PATH = "abrechnungen.csv"
 PRICES_JSON_PATH = "Preise.json"
@@ -398,7 +401,7 @@ def generate_invoice_number_api():
 
 ### Einfacher HTTP Basic Auth Schutz ###
 def check_auth(username, password):
-    return username == "admin" and password == "secret"
+    return username == os.getenv("ADMIN_USERNAME", "admin") and password == os.getenv("ADMIN_PASSWORD", "secret")
 
 
 def authenticate():
