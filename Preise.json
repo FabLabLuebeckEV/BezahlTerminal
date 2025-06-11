@@ -262,6 +262,12 @@
     "kategorie": "Textilbereich"
   },
   {
+    "name": "Sublimationsdrucker",
+    "kosten": [1.0, 0.5, 0.33],
+    "Einheit": "Blatt",
+    "kategorie": "Sublimation"
+  },
+  {
     "name": "Format-Kreissäge Einweisung",
     "kosten": [20.0, 10.0, 0.0],
     "Einheit": "einmalig",
@@ -344,6 +350,12 @@
     "kosten": [0.0, 0.0, 0.0],
     "Einheit": "einmalig",
     "kategorie": "Folienplotter/Heatpress"
+  },
+  {
+    "name": "Sublimationsdrucker Einweisung",
+    "kosten": [5.0, 2.5, 0.0],
+    "Einheit": "einmalig",
+    "kategorie": "Sublimation"
   },
   {
     "name": "UV-Drucker Einweisung",
