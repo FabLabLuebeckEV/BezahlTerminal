@@ -1,0 +1,27 @@
+WARNING:root:config.json fehlt – lege neue Datei an.
+ * Serving Flask app 'main'
+ * Debug mode: on
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.2:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:root:config.json fehlt – lege neue Datei an.
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 479-401-854
+INFO:root:Try: Generating invoice with attachment
+INFO:easyverein:Creating object of type invoice
+ERROR:root:Error creating invoice
+Traceback (most recent call last):
+  File "/app/main.py", line 131, in create_invoice_with_attachment
+    invoice = ev_connection.invoice.create(invoice_model)
+  File "/home/swebot/.local/lib/python3.10/site-packages/easyverein/modules/mixins/crud.py", line 126, in create
+    response = self.c.create(url, data)
+  File "/home/swebot/.local/lib/python3.10/site-packages/easyverein/core/client.py", line 179, in create
+    return self._handle_response(
+  File "/home/swebot/.local/lib/python3.10/site-packages/easyverein/core/client.py", line 340, in _handle_response
+    raise EasyvereinAPIException(f"API returned status code {status_code}. API response: {data}")
+easyverein.core.exceptions.EasyvereinAPIException: API returned status code 401. API response: {'detail': 'Ungültiger token header. Keine Zugangsdaten angegeben.'}
+INFO:werkzeug:127.0.0.1 - - [11/Jun/2025 12:42:15] "[32mPOST /reupload-invoice HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [11/Jun/2025 12:42:15] "POST /admin HTTP/1.1" 200 -

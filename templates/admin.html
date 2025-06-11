@@ -28,7 +28,7 @@
           <th>Nutzungsgebühr</th>
           <th>Bezahlt</th>
           <th>Download</th>
-          <th>Aktion</th>
+          <th>Aktionen</th>
         </tr>
       </thead>
       <tbody>
@@ -40,11 +40,16 @@
           <td>{{ entry.berechneter_gesamtpreis }}</td>
           <td>{{ entry.bezahlter_betrag }}</td>
           <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">{{ entry.pdf_filename[:-4] }}</a></td>
-          <td>
-            <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');">
+          <td class="actions-cell">
+            <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');" style="display: inline;">
               <input type="hidden" name="timestamp" value="{{ entry.datum }}">
               <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
               <button type="submit">Löschen</button>
+            </form>
+            <form method="POST" action="{{ url_for('reupload_invoice') }}" onsubmit="return confirm('Rechnung wirklich erneut hochladen?');" style="display: inline;">
+              <input type="hidden" name="timestamp" value="{{ entry.datum }}">
+              <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
+              <button type="submit">Erneut Hochladen</button>
             </form>
           </td>
         </tr>
@@ -67,7 +72,7 @@
           <th>Nutzungsgebühr</th>
           <th>Bezahlt</th>
           <th>Download</th>
-          <th>Aktion</th>
+          <th>Aktionen</th>
         </tr>
       </thead>
       <tbody>
@@ -79,11 +84,16 @@
           <td>{{ entry.berechneter_gesamtpreis }}</td>
           <td>{{ entry.bezahlter_betrag }}</td>
           <td><a href="{{ url_for('download_pdf', filename=entry.pdf_filename) }}">{{ entry.pdf_filename[:-4] }}</a></td>
-          <td>
-            <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');">
+          <td class="actions-cell">
+            <form method="POST" action="{{ url_for('delete_entry') }}" onsubmit="return confirm('Wirklich löschen?');" style="display: inline;">
               <input type="hidden" name="timestamp" value="{{ entry.datum }}">
               <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
               <button type="submit">Löschen</button>
+            </form>
+            <form method="POST" action="{{ url_for('reupload_invoice') }}" onsubmit="return confirm('Rechnung wirklich erneut hochladen?');" style="display: inline;">
+              <input type="hidden" name="timestamp" value="{{ entry.datum }}">
+              <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
+              <button type="submit">Erneut Hochladen</button>
             </form>
           </td>
         </tr>
