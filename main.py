@@ -110,7 +110,7 @@ def handle_token_refresh(token: str | None):
         logging.exception("Token-Refresh: Konnte config.json nicht schreiben – behalte alten Wert.")
 
 
-def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True, name: string = "Sammelnutzer", date: datetime.date = datetime.date.today()):
+def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool = True, name: string = "Sammelnutzer", date_for_invoice: datetime.date = None):
     logging.info("Try: Generating invoice with attachment")
     ev_connection = EasyvereinAPI(api_key=api_key,
                       api_version='v2.0', token_refresh_callback=handle_token_refresh, auto_refresh_token=True)  # token_refresh_callback=handle_token_refresh, auto_refresh_token=True,
@@ -118,7 +118,7 @@ def create_invoice_with_attachment(file: Path, totalPrice: float, isCash: bool =
     invoice_model = InvoiceCreate(
         invNumber=file.stem,
         totalPrice=totalPrice,
-        date=date,
+        date=date_for_invoice if date_for_invoice else datetime.date.today(),
         isDraft=True,
         gross=False,
         description="Gerätenutzung",
@@ -370,8 +370,19 @@ def index():
         #if zahlungsmethode.lower() == "karte":
         #    rechnungsnummer = generate_unique_invoice_number()
 
+        custom_date_str = request.form.get("custom_date", "").strip()
+        if custom_date_str:
+            try:
+                custom_date_obj = datetime.datetime.strptime(custom_date_str, "%Y-%m-%d")
+                # Combine parsed date with current time
+                effective_datetime_obj = datetime.datetime.combine(custom_date_obj.date(), datetime.datetime.now().time())
+            except ValueError:
+                effective_datetime_obj = datetime.datetime.now()  # Fallback to now if parsing fails
+        else:
+            effective_datetime_obj = datetime.datetime.now()  # Default to now if custom_date is empty
+
         data_dict = {
-            "datum": datetime.datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
+            "datum": effective_datetime_obj.strftime("%d.%m.%Y %H:%M:%S"),
             "rechnungsnummer": rechnungsnummer,
             "name": name,
             "mitgliedsstatus": mitgliedsstatus,
@@ -386,7 +397,7 @@ def index():
 
         # PDF-Beleg generieren
         pdf_file = generate_pdf_receipt(data_dict)
-        create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar", name)
+        create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar", name, date_for_invoice=effective_datetime_obj.date())
         flash(
             f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}", "success")
         return redirect(url_for("index"))
@@ -672,7 +683,7 @@ def reupload_invoice():
 
     try:
         create_invoice_with_attachment(pdf_full_path, total_price, is_cash, name,
-                                       date=datetime.datetime.strptime(invoice_data["datum"], "%d.%m.%Y %H:%M:%S").date())
+                                       date_for_invoice=datetime.datetime.strptime(invoice_data["datum"], "%d.%m.%Y %H:%M:%S").date())
         flash(f"Rechnung {rechnungsnummer} erfolgreich erneut zu EasyVerein hochgeladen.", "success")
     except Exception as e:
         logging.error(f"Fehler beim erneuten Hochladen der Rechnung {rechnungsnummer}: {e}", exc_info=True)
