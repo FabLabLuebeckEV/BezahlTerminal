@@ -9,21 +9,21 @@
   {
     "name": "Platinenfräse",
     "kosten": [2.0, 1.0, 0.0],
-    "Einheit": "pro angefagnene 15 Minuten + Material",
+    "Einheit": "pro angefangene 15 Minuten + Material",
     "keywords": ["PCB", "Fräse", "Leiterplatte"],
     "kategorie": "E-Ecke"
   },
   {
     "name": "Lasercutter",
     "kosten": [4.0, 1.0, 0.0],
-    "Einheit": "pro angefagnene 10 Minuten Laserzeit",
+    "Einheit": "pro angefangene 10 Minuten Laserzeit",
     "keywords": ["Laser", "Schneiden", "Gravur"],
     "kategorie": "Lasercutter"
   },
   {
     "name": "Lasercutter MOPA",
     "kosten": [4.0, 1.0, 0.0],
-    "Einheit": "pro angefagnene 10 Minuten Laserzeit",
+    "Einheit": "pro angefangene 10 Minuten Laserzeit",
     "keywords": ["Laser", "Schneiden", "Gravur"],
     "kategorie": "MOPA"
   },
