@@ -27,7 +27,8 @@
   <form id="billing-form" action="/" method="POST">
     <div class="form-section">
       <label for="name">Name:</label>
-      <input type="text" name="name" id="name" required />
+<input type="text" name="name" id="name" required
+       {% if auth_active %} value="Nutzer" {% endif %} />
 
       <label for="mitgliedsstatus">Mitgliedsstatus:</label>
       <select name="mitgliedsstatus" id="mitgliedsstatus">

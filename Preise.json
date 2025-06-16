@@ -59,72 +59,84 @@
     "name": "Brother Inno-is NV 10",
     "kosten": [1.00, 0.50, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Stiche", "Nächmaschine"],
     "kategorie": "Textilbereich"
   },
   {
     "name": "Brother Inno-is V3",
     "kosten": [3.00, 1.50, 1.50],
     "Einheit": "Pro angefangene 5000 Stiche",
+    "keywords": ["Stick", "CNC", "Stiche", "Nächmaschine"],
     "kategorie": "Textilbereich"
   },
   {
     "name": "Overlock",
     "kosten": [3.00, 1.50, 1.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Nähen", "Textil", "Overlock", "Versäubern"],
     "kategorie": "Textilbereich"
   },
   {
     "name": "Format-Kreissäge",
     "kosten": [6.00, 3.00, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Holz", "Sägen", "Formatkreissäge", "Plattenschnitt"],
     "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Kapp- & Gehrungssäge",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Holz", "Sägen", "Gehrung", "Kappsäge"],
     "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Tischbohrmaschine",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Bohren", "Metall", "Holz"],
     "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Bandsäge",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Sägen", "Holz", "Metall", "Bandsäge"],
     "kategorie": "Holzwerkstatt"
   },
   {
     "name": "Alle sonstigen Kleingeräte",
     "kosten": [3.00, 1.50, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Werkstatt", "Kleingeräte", "Allgemein", "Handwerk"],
     "kategorie": "Allg. Büro- und Werkstattausstattung"
   },
   {
     "name": "Drehmaschine",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Pro ½h",
+    "keywords": ["Drehen", "Metall", "Maschine", "Zerspanung"],
     "kategorie": "Metallwerkstatt"
   },
   {
     "name": "Fräse (in Holz/Metall-Werkstatt)",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Pro ½h",
+    "keywords": ["Fräsen", "Metall", "Holz", "Zerspanung"],
     "kategorie": "Metallwerkstatt"
   },
   {
     "name": "Sandstrahlkabine",
     "kosten": [2.00, 1.00, 0.00],
     "Einheit": "Tagespauschale",
+    "keywords": ["Reinigung", "Sandstrahlen", "Oberfläche", "Metall"],
     "kategorie": "Metallwerkstatt"
   },
   {
     "name": "CNC-Fräse",
     "kosten": [5.00, 2.50, 0.00],
     "Einheit": "Pro ½h",
+    "keywords": ["CNC", "Fräsen", "Automatisierung", "Metall", "Holz"],
     "kategorie": "CNC Fräse"
   },
   {
@@ -145,6 +157,7 @@
     "name": "FDM-Drucker",
     "kosten": [1.00, 0.50, 0.00],
     "Einheit": "pro Stunde",
+    "keywords": ["3D", "Druck", "FDM", "Filament"],
     "kategorie": "FDM 3D-Drucker"
   },
   {
@@ -158,30 +171,35 @@
     "name": "FDM-Drucker Material spezial",
     "kosten": [0.07, 0.07, 0.07],
     "Einheit": "pro Gramm",
+    "keywords": ["3D", "Material", "Filament", "spezial"],
     "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "Großformat Normalpapier",
     "kosten": [4.00, 2.00, 2.00],
     "Einheit": "Pro 0,5m",
+    "keywords": ["Druck", "Plotter", "Papier", "großformatig"],
     "kategorie": "Großformatdrucker"
   },
   {
     "name": "Großformat Beschichtetes Papier",
     "kosten": [8.00, 4.00, 4.00],
     "Einheit": "Pro 0,5m",
+    "keywords": ["Druck", "Plotter", "Papier", "beschichtet"],
     "kategorie": "Großformatdrucker"
   },
   {
     "name": "Großformat Transparentes Papier",
     "kosten": [6.00, 3.00, 3.00],
     "Einheit": "Pro 0,5m",
+    "keywords": ["Druck", "Plotter", "Papier", "transparent"],
     "kategorie": "Großformatdrucker"
   },
   {
     "name": "Großformat Fotopapier",
     "kosten": [14.00, 7.00, 7.00],
     "Einheit": "Pro 0,5m",
+    "keywords": ["Druck", "Plotter", "Papier", "Foto"],
     "kategorie": "Großformatdrucker"
   },
   {
@@ -200,18 +218,21 @@
     "name": "UV-Drucker",
     "kosten": [3.00, 3.00, 3.00],
     "Einheit": "Pro 1 ml",
+    "keywords": ["UV", "Druck", "Tinte", "Direktdruck"],
     "kategorie": "UV-Drucker"
   },
   {
     "name": "UV-Drucker reinigung",
     "kosten": [10.00, 10.00, 10.00],
     "Einheit": "Reinigung",
+    "keywords": ["UV", "Reinigung", "Druck", "Wartung"],
     "kategorie": "UV-Drucker"
   },
   {
     "name": "Makercard",
     "kosten": [2.00, 2.00, 2.00],
     "Einheit": "Pro Karte",
+    "keywords": ["Zugang", "Karte", "Maker", "Mitglied"],
     "kategorie": "Einweisungsgebühren/MakerCards"
   },
   {
@@ -386,6 +407,12 @@
     "name": "Mio",
     "kosten": [1.5, 1.5, 1.5],
     "Einheit": "einmalig",
-    "kategorie": ""
+    "kategorie": "Snacko"
+  },
+  {
+    "name": "Pizza",
+    "kosten": [3.0, 3.0, 3.0],
+    "Einheit": "einmalig",
+    "kategorie": "Snacko"
   }
 ]
