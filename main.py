@@ -401,8 +401,8 @@ def index():
         flash(
             f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}", "success")
         return redirect(url_for("index"))
-
-    return render_template("index.html", price_data=price_data)
+    auth_active = is_authenticated()
+    return render_template("index.html", price_data=price_data, auth_active=auth_active)
 
 @app.route("/api/generate_invoice_number")
 def generate_invoice_number_api():
@@ -431,6 +431,10 @@ def requires_auth(f):
         return f(*args, **kwargs)
 
     return decorated
+
+def is_authenticated():
+    auth = request.authorization
+    return auth and check_auth(auth.username, auth.password)
 
 
 ### Route für den Admin-Bereich ###
