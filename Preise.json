@@ -156,20 +156,20 @@
   {
     "name": "FDM-Drucker",
     "kosten": [1.00, 0.50, 0.00],
-    "Einheit": "pro Stunde",
+    "Einheit": "Tagespauschale",
     "keywords": ["3D", "Druck", "FDM", "Filament"],
     "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "FDM-Drucker Material normal",
-    "kosten": [0.03, 0.03, 0.03],
+    "kosten": [0.08, 0.04, 0.03],
     "Einheit": "pro Gramm",
     "keywords": ["3D", "PLA", "TPU", "PETG", "ABS", "Filament", "Material", "print"],
     "kategorie": "FDM 3D-Drucker"
   },
   {
     "name": "FDM-Drucker Material spezial",
-    "kosten": [0.07, 0.07, 0.07],
+    "kosten": [0.12, 0.08, 0.07],
     "Einheit": "pro Gramm",
     "keywords": ["3D", "Material", "Filament", "spezial"],
     "kategorie": "FDM 3D-Drucker"
