@@ -216,14 +216,14 @@
   },
   {
     "name": "UV-Drucker",
-    "kosten": [3.00, 3.00, 3.00],
+    "kosten": [3.00, 2.00, 1.00],
     "Einheit": "Pro 1 ml",
     "keywords": ["UV", "Druck", "Tinte", "Direktdruck"],
     "kategorie": "UV-Drucker"
   },
   {
     "name": "UV-Drucker reinigung",
-    "kosten": [10.00, 10.00, 10.00],
+    "kosten": [4.00, 4.00, 4.00],
     "Einheit": "Reinigung",
     "keywords": ["UV", "Reinigung", "Druck", "Wartung"],
     "kategorie": "UV-Drucker"
@@ -393,7 +393,7 @@
   },
   {
     "name": "UV-Drucker Einweisung",
-    "kosten": [15.0, 7.5, 0.0],
+    "kosten": [20.0, 10.0, 0.0],
     "Einheit": "einmalig",
     "kategorie": "UV-Drucker"
   },
