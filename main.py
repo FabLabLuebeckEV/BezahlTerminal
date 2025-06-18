@@ -202,7 +202,9 @@ def generate_pdf_receipt(data_dict):
         beleg_template = json.load(f)
 
     # Erstelle einen Dateinamen anhand des Zeitstempels
-    timestamp = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
+    #data_dict.get('datum')
+
+    timestamp = data_dict.get('datum').strftime("%d.%m.%Y %H:%M:%S")
     pdf_filename = os.path.join("pdfs", f"{timestamp}.pdf")
     os.makedirs("pdfs", exist_ok=True)
 
