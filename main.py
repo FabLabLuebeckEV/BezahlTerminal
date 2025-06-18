@@ -192,7 +192,7 @@ def write_to_csv(data_dict):
         writer.writerow(data_dict)
 
 
-def generate_pdf_receipt(data_dict):
+def generate_pdf_receipt(data_dict, effective_datetime_obj):
     """
     Erzeugt einen PDF-Beleg anhand der Eintragsdaten und einer Vorlage aus beleg.json.
     Der PDF-Name basiert auf dem aktuellen Zeitstempel.
@@ -203,18 +203,6 @@ def generate_pdf_receipt(data_dict):
 
     # Erstelle einen Dateinamen anhand des Zeitstempels
     #data_dict.get('datum')
-    custom_date_str = data_dict.get('datum').strip()
-    if custom_date_str:
-        try:
-            custom_date_obj = datetime.datetime.strptime(custom_date_str, "%Y-%m-%d")
-            # Combine parsed date with current time
-            effective_datetime_obj = datetime.datetime.combine(custom_date_obj.date(), datetime.datetime.now().time())
-        except ValueError:
-            effective_datetime_obj = datetime.datetime.now()  # Fallback to now if parsing fails
-    else:
-        effective_datetime_obj = datetime.datetime.now()  # Default to now if custom_date is empty
-
-
     timestamp = effective_datetime_obj.strftime("%d%m%Y%H%M%S")
     #timestamp = data_dict.get('datum').strftime("%d.%m.%Y %H:%M:%S")
     pdf_filename = os.path.join("pdfs", f"{timestamp}.pdf")
@@ -410,7 +398,7 @@ def index():
         write_to_csv(data_dict)
 
         # PDF-Beleg generieren
-        pdf_file = generate_pdf_receipt(data_dict)
+        pdf_file = generate_pdf_receipt(data_dict, effective_datetime_obj)
         create_invoice_with_attachment(Path(pdf_file), bezahlter_betrag, zahlungsmethode.lower() == "bar", name, date_for_invoice=effective_datetime_obj.date())
         flash(
             f"Abrechnung gespeichert! bezahlter Betrag: {bezahlter_betrag:.2f} €, Spende: {spende:.2f}, Rechnungsnr.: {rechnungsnummer}. PDF: {os.path.basename(pdf_file)}", "success")
