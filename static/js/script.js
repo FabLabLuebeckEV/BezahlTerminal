@@ -185,7 +185,7 @@ function addPositionRow() {
         />
         <div class="dropdown-list hidden"></div>
       </div>
-      <label>Menge:</label>
+      <label id="menge">Menge:</label>
       <input
         type="number"
         step="0.01"
