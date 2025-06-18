@@ -203,8 +203,20 @@ def generate_pdf_receipt(data_dict):
 
     # Erstelle einen Dateinamen anhand des Zeitstempels
     #data_dict.get('datum')
+    custom_date_str = data_dict.get('datum').strip()
+    if custom_date_str:
+        try:
+            custom_date_obj = datetime.datetime.strptime(custom_date_str, "%Y-%m-%d")
+            # Combine parsed date with current time
+            effective_datetime_obj = datetime.datetime.combine(custom_date_obj.date(), datetime.datetime.now().time())
+        except ValueError:
+            effective_datetime_obj = datetime.datetime.now()  # Fallback to now if parsing fails
+    else:
+        effective_datetime_obj = datetime.datetime.now()  # Default to now if custom_date is empty
 
-    timestamp = data_dict.get('datum').strftime("%d.%m.%Y %H:%M:%S")
+
+    timestamp = effective_datetime_obj.strftime("%d.%m.%Y %H:%M:%S")
+    #timestamp = data_dict.get('datum').strftime("%d.%m.%Y %H:%M:%S")
     pdf_filename = os.path.join("pdfs", f"{timestamp}.pdf")
     os.makedirs("pdfs", exist_ok=True)
 
