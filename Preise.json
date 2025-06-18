@@ -56,14 +56,14 @@
     "kategorie": "3D Scanner"
   },
   {
-    "name": "Brother Inno-is NV 10",
+    "name": "Nähmaschine Brother Inno-is NV 10",
     "kosten": [1.00, 0.50, 0.00],
     "Einheit": "Tagespauschale",
     "keywords": ["Stiche", "Nächmaschine"],
     "kategorie": "Textilbereich"
   },
   {
-    "name": "Brother Inno-is V3",
+    "name": "Stickmaschine Brother Inno-is V3",
     "kosten": [3.00, 1.50, 1.50],
     "Einheit": "Pro angefangene 5000 Stiche",
     "keywords": ["Stick", "CNC", "Stiche", "Nächmaschine"],
@@ -278,13 +278,13 @@
     "kategorie": "3D Scanner"
   },
   {
-    "name": "Brother Inno-is NV 10 Einweisung",
+    "name": "Nähmaschine Brother Inno-is NV 10 Einweisung",
     "kosten": [0.0, 0.0, 0.0],
     "Einheit": "einmalig",
     "kategorie": "Textilbereich"
   },
   {
-    "name": "Brother Inno-is V3 Einweisung",
+    "name": "Stickmaschine Brother Inno-is V3 Einweisung",
     "kosten": [10.0, 5.0, 0.0],
     "Einheit": "einmalig",
     "kategorie": "Textilbereich"
