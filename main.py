@@ -707,7 +707,7 @@ def download_pdf(filename):
         return send_file(
             pdf_path,
             mimetype="application/pdf",
-            as_attachment=True,
+            as_attachment=False,
             download_name=filename
         )
     else:
