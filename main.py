@@ -215,7 +215,7 @@ def generate_pdf_receipt(data_dict):
         effective_datetime_obj = datetime.datetime.now()  # Default to now if custom_date is empty
 
 
-    timestamp = effective_datetime_obj.strftime("%d.%m.%Y %H:%M:%S")
+    timestamp = effective_datetime_obj.strftime("%d%m%Y%H%M%S")
     #timestamp = data_dict.get('datum').strftime("%d.%m.%Y %H:%M:%S")
     pdf_filename = os.path.join("pdfs", f"{timestamp}.pdf")
     os.makedirs("pdfs", exist_ok=True)
