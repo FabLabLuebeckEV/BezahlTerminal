@@ -1,4 +1,7 @@
 .env
+.venv/
 abrechnungen.csv
 pdfs/
 config.json
+.idea/
+*.log
