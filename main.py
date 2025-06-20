@@ -636,6 +636,39 @@ def delete_entry():
     flash(f"Eintrag vom {timestamp} wurde gelöscht.", "success")
     return redirect(url_for("admin"))
 
+def find_invoice_in_csv(timestamp_str, rechnungsnummer):
+    invoice_data = None
+    if os.path.exists(CSV_FILE_PATH):
+        with open(CSV_FILE_PATH, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                # Vergleiche den Datums-Teil des Timestamps und die Rechnungsnummer
+                if row["datum"] == timestamp_str and row["rechnungsnummer"] == rechnungsnummer:
+                    invoice_data = row
+                    break
+    return invoice_data
+
+@app.route("/recreate-invoice", methods=["POST"])
+@requires_auth
+def recreate_invoice():
+    timestamp_str = request.form.get("timestamp")
+    rechnungsnummer = request.form.get("rechnungsnummer")
+
+    if not timestamp_str or not rechnungsnummer:
+        flash("Fehlende Parameter: Zeitstempel und Rechnungsnummer sind erforderlich.", "error")
+        return redirect(request.referrer or url_for("admin"))
+    
+    invoice_data = find_invoice_in_csv(timestamp_str, rechnungsnummer)
+
+    if not invoice_data:
+        flash(f"Rechnung nicht gefunden für Zeitstempel {timestamp_str} and Rechnungsnummer {rechnungsnummer}.", "error")
+        return redirect(request.referrer or url_for("admin"))
+    
+    effective_datetime_obj = datetime.datetime.strptime(timestamp_str, "%d.%m.%Y %H:%M:%S")
+    pdf_file = generate_pdf_receipt(invoice_data, effective_datetime_obj)
+
+    flash(f"PDF recreated at {pdf_file}")
+    return redirect(request.referrer or url_for("admin"))
 
 @app.route("/reupload-invoice", methods=["POST"])
 @requires_auth
@@ -648,15 +681,7 @@ def reupload_invoice():
         return redirect(request.referrer or url_for("admin"))
 
     # Finde den Eintrag in der CSV
-    invoice_data = None
-    if os.path.exists(CSV_FILE_PATH):
-        with open(CSV_FILE_PATH, "r", encoding="utf-8-sig") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                # Vergleiche den Datums-Teil des Timestamps und die Rechnungsnummer
-                if row["datum"] == timestamp_str and row["rechnungsnummer"] == rechnungsnummer:
-                    invoice_data = row
-                    break
+    invoice_data = find_invoice_in_csv(timestamp_str, rechnungsnummer)
 
     if not invoice_data:
         flash(f"Rechnung nicht gefunden für Zeitstempel {timestamp_str} and Rechnungsnummer {rechnungsnummer}.", "error")
