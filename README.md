@@ -34,7 +34,7 @@ Das Tool ermöglicht Mitgliedern und Gästen des FabLabs, die Nutzung von Maschi
 dein_projekt/
  ├─ Preise.json               # Zentrales JSON mit allen Maschinen & Preisen
  ├─ abrechnungen.csv          # CSV-Datei, in die alle Buchungen geschrieben werden
- ├─ app.py                    # Haupt-Flask-App (Backend)
+ ├─ main.py                   # Haupt-Flask-App (Backend)
  ├─ templates/
  │   └─ index.html            # Startseite / Web-Formular
  ├─ static/
@@ -49,23 +49,19 @@ dein_projekt/
 
 ## Installation & Start
 
+0. **uv installieren** Falls nötig, siehe https://github.com/astral-sh/uv
+
 1. **Repository klonen**  
    ```bash
    git clone <URL-zum-Repository>
    cd dein_projekt
    ```
 
-2. **Abhängigkeiten installieren**  
-   > Voraussetzung: Python 3.x  
-   ```bash
-   pip install flask
-   ```
-
 3. **Preise.json anpassen** (siehe unten), falls nötig.
 
 4. **Starten**  
    ```bash
-   python app.py
+   uv run main.py
    ```
    Danach ist das Tool typischerweise unter http://127.0.0.1:5000/ erreichbar.
 
