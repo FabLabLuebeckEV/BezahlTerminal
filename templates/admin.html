@@ -110,6 +110,11 @@
               <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
               <button type="submit">Erneut Hochladen</button>
             </form>
+            <form method="POST" action="{{ url_for('recreate_invoice') }}" onsubmit="return confirm('Rechnung wirklich neu erzeugen (wird nicht automatisch hochgeladen)?');" style="display: inline;">
+              <input type="hidden" name="timestamp" value="{{ entry.datum }}">
+              <input type="hidden" name="rechnungsnummer" value="{{ entry.rechnungsnummer }}">
+              <button type="submit">Rechnung erzeugen</button>
+            </form>
           </td>
         </tr>
         {% endfor %}
