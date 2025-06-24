@@ -76,9 +76,8 @@ def atomic_write_json(path: pathlib.Path, data: dict):
             tmp_file.flush()          # sicherstellen, dass alles im Puffer ist
             os.fsync(tmp_file.fileno())
         # Backup der aktuellen Datei anlegen
-        backup_path = path.with_suffix(".bak") # Use path argument here
         if path.exists():
-            shutil.copy2(path, backup_path)
+            shutil.copy2(path, CONFIG_BAK)
         # Jetzt das temp-File atomisch verschieben
         os.replace(tmp_name, path)
     finally:
@@ -185,8 +184,7 @@ def write_to_csv(data_dict):
             "berechneter_gesamtpreis",
             "spendenbetrag",
             "positionen",
-            "notiz",
-            "pdf_filename" # Added for consistency with admin view and reupload logic
+            "notiz"
         ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         if not file_exists:
@@ -659,13 +657,13 @@ def recreate_invoice():
     if not timestamp_str or not rechnungsnummer:
         flash("Fehlende Parameter: Zeitstempel und Rechnungsnummer sind erforderlich.", "error")
         return redirect(request.referrer or url_for("admin"))
-    
+
     invoice_data = find_invoice_in_csv(timestamp_str, rechnungsnummer)
 
     if not invoice_data:
         flash(f"Rechnung nicht gefunden für Zeitstempel {timestamp_str} and Rechnungsnummer {rechnungsnummer}.", "error")
         return redirect(request.referrer or url_for("admin"))
-    
+
     effective_datetime_obj = datetime.datetime.strptime(timestamp_str, "%d.%m.%Y %H:%M:%S")
     pdf_file = generate_pdf_receipt(invoice_data, effective_datetime_obj)
 

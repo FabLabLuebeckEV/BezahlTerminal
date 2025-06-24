@@ -1,0 +1,8 @@
+README.md
+main.py
+pyproject.toml
+bezahlterminal.egg-info/PKG-INFO
+bezahlterminal.egg-info/SOURCES.txt
+bezahlterminal.egg-info/dependency_links.txt
+bezahlterminal.egg-info/requires.txt
+bezahlterminal.egg-info/top_level.txt
